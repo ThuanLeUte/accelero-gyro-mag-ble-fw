@@ -1,32 +1,32 @@
 /**
- * @file       hmc5883l.c
+ * @file       mpu9250.c
  * @copyright  Copyright (C) 2020 ThuanLe. All rights reserved.
  * @license    This project is released under the ThuanLe License.
  * @version    1.0.0
  * @date       2021-03-22
  * @author     Thuan Le
- * @brief      Driver support HMC5883L (Magnetometer)
+ * @brief      Driver support MPU9250 (IMU)
  * @note       None
  * @example    None
  */
 
 /* Includes ----------------------------------------------------------- */
-#include "hmc5883l.h"
+#include "mpu9250.h"
 
 /* Private defines ---------------------------------------------------- */
 // Registers
-#define HMC5883L_REG_                   (0x00)
+#define MPU9250_REG_                   (0x00)
 
 /* Private enumerate/structure ---------------------------------------- */
 /* Private macros ----------------------------------------------------- */
 /* Public variables --------------------------------------------------- */
 /* Private variables -------------------------------------------------- */
 /* Private function prototypes ---------------------------------------- */
-static base_status_t m_hmc5883l_read_reg(hmc5883l_t *me, uint8_t reg, uint8_t *p_data, uint32_t len);
-static base_status_t m_hmc5883l_write_reg(hmc5883l_t *me, uint8_t reg, uint8_t *p_data, uint32_t len);
+static base_status_t m_mpu9250_read_reg(mpu9250_t *me, uint8_t reg, uint8_t *p_data, uint32_t len);
+static base_status_t m_mpu9250_write_reg(mpu9250_t *me, uint8_t reg, uint8_t *p_data, uint32_t len);
 
 /* Function definitions ----------------------------------------------- */
-base_status_t hmc5883l_init(hmc5883l_t *me)
+base_status_t mpu9250_init(mpu9250_t *me)
 {
   uint8_t identifier = 0x00;
 
@@ -38,9 +38,9 @@ base_status_t hmc5883l_init(hmc5883l_t *me)
 
 /* Private function definitions ---------------------------------------- */
 /**
- * @brief         HMC5883L read register
+ * @brief         MPU9250 read register
  *
- * @param[in]     me      Pointer to handle of HMC5883L module.
+ * @param[in]     me      Pointer to handle of MPU9250 module.
  * @param[in]     reg     Register
  * @param[in]     p_data  Pointer to handle of data
  * @param[in]     len     Data length
@@ -51,7 +51,7 @@ base_status_t hmc5883l_init(hmc5883l_t *me)
  * - BS_OK
  * - BS_ERROR
  */
-static base_status_t m_hmc5883l_read_reg(hmc5883l_t *me, uint8_t reg, uint8_t *p_data, uint32_t len)
+static base_status_t m_mpu9250_read_reg(mpu9250_t *me, uint8_t reg, uint8_t *p_data, uint32_t len)
 {
   CHECK(0 == me->i2c_read(me->device_address, reg, p_data, len), BS_ERROR);
 
@@ -59,9 +59,9 @@ static base_status_t m_hmc5883l_read_reg(hmc5883l_t *me, uint8_t reg, uint8_t *p
 }
 
 /**
- * @brief         HMC5883L read register
+ * @brief         MPU9250 read register
  *
- * @param[in]     me      Pointer to handle of HMC5883L module.
+ * @param[in]     me      Pointer to handle of MPU9250 module.
  * @param[in]     reg     Register
  * @param[in]     p_data  Pointer to handle of data
  * @param[in]     len     Data length
@@ -72,7 +72,7 @@ static base_status_t m_hmc5883l_read_reg(hmc5883l_t *me, uint8_t reg, uint8_t *p
  * - BS_OK
  * - BS_ERROR
  */
-static base_status_t m_hmc5883l_write_reg(hmc5883l_t *me, uint8_t reg, uint8_t *p_data, uint32_t len)
+static base_status_t m_mpu9250_write_reg(mpu9250_t *me, uint8_t reg, uint8_t *p_data, uint32_t len)
 {
   CHECK(0 == me->i2c_write(me->device_address, reg, p_data, len), BS_ERROR);
 

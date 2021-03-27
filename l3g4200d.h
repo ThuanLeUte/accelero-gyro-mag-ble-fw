@@ -1,5 +1,5 @@
 /**
- * @file       l3g4200d.c
+ * @file       l3g4200d.h
  * @copyright  Copyright (C) 2020 ThuanLe. All rights reserved.
  * @license    This project is released under the ThuanLe License.
  * @version    1.0.0

@@ -1,18 +1,18 @@
 /**
- * @file       mis2dh.h
+ * @file       mpu9250.h
  * @copyright  Copyright (C) 2020 ThuanLe. All rights reserved.
  * @license    This project is released under the ThuanLe License.
  * @version    1.0.0
  * @date       2021-03-22
  * @author     Thuan Le
- * @brief      Driver support MIS2DH (Accelerometer)
+ * @brief      Driver support MPU9250 (IMU)
  * @note       None
  * @example    None
  */
 
 /* Define to prevent recursive inclusion ------------------------------ */
-#ifndef __MIS2DH_H
-#define __MIS2DH_H
+#ifndef __MPU9250_H
+#define __MPU9250_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -22,11 +22,11 @@ extern "C" {
 #include "bsp.h"
 
 /* Public defines ----------------------------------------------------- */
-#define MIS2DH_I2C_ADDR                  (0x90 >> 1)
+#define MPU9250_I2C_ADDR                  (0x90 >> 1)
 
 /* Public enumerate/structure ----------------------------------------- */
 /**
- * @brief MIS2DH sensor struct
+ * @brief MPU9250 sensor struct
  */
 typedef struct 
 {
@@ -38,15 +38,15 @@ typedef struct
   // Write n-bytes from device's internal address <reg_addr> via I2C bus
   base_status_t (*i2c_write) (uint8_t slave_addr, uint8_t reg_addr, uint8_t *data, uint32_t len);
 }
-mis2dh_t;
+mpu9250_t;
 
 /* Public macros ------------------------------------------------------ */
 /* Public variables --------------------------------------------------- */
 /* Public function prototypes ----------------------------------------- */
 /**
- * @brief         Initialize MIS2DH
+ * @brief         Initialize MPU9250
  *
- * @param[in]     me            Pointer to handle of MIS2DH module.
+ * @param[in]     me            Pointer to handle of MPU9250 module.
  *
  * @attention     None
  *
@@ -54,12 +54,12 @@ mis2dh_t;
  * - BS_OK
  * - BS_ERROR
  */
-base_status_t mis2dh_init(mis2dh_t *me);
+base_status_t mpu9250_init(mpu9250_t *me);
 
 /* -------------------------------------------------------------------------- */
 #ifdef __cplusplus
 } // extern "C"
 #endif
-#endif // __MIS2DH_H
+#endif // __MPU9250_H
 
 /* End of file -------------------------------------------------------- */
