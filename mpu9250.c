@@ -15,9 +15,9 @@
 
 /* Private defines ---------------------------------------------------- */
 //Define Registers
-#define MPU9250_REG_WHO_AM_I                    (0x75)
+#define MPU9250_REG_WHO_AM_I                  (0x75)
 #define MPU9250_REG_PWR_MAGT_1		            (0x6B)
-#define MPU9250_REG_CONFIG			            (0x1A)
+#define MPU9250_REG_CONFIG			              (0x1A)
 #define MPU9250_REG_GYRO_CONFIG		            (0x1B)
 #define MPU9250_REG_ACCEL_CONFIG	            (0x1C)
 #define MPU9250_REG_SMPLRT_DIV		            (0x19)
@@ -25,14 +25,14 @@
 #define MPU9250_REG_ACCEL_XOUT_H	            (0x3B)
 #define MPU9250_REG_TEMP_OUT_H		            (0x41)
 #define MPU9250_REG_GYRO_XOUT_H		            (0x43)
-#define MPU9250_REG_FIFO_EN 		            (0x23)
+#define MPU9250_REG_FIFO_EN 		              (0x23)
 #define MPU9250_REG_INT_ENABLE 		            (0x38)
 #define MPU9250_REG_I2CMACO 	  	            (0x23)
-#define MPU9250_REG_USER_CNT                    (0x6A)
-#define MPU9250_REG_FIFO_COUNTH                 (0x72)
-#define MPU9250_REG_FIFO_R_W                    (0x74)
+#define MPU9250_REG_USER_CNT                  (0x6A)
+#define MPU9250_REG_FIFO_COUNTH               (0x72)
+#define MPU9250_REG_FIFO_R_W                  (0x74)
 
-#define MPU9250_PART_IDENTIFIER                 (0X68)
+#define MPU9250_PART_IDENTIFIER               (0X68)
 
 /* Private enumerate/structure ---------------------------------------- */
 //1- MPU Configuration 
@@ -50,11 +50,11 @@ typedef struct
 enum PM_CLKSEL_ENUM
 {
 	Internal_8MHz 	= 0x00,
-	X_Axis_Ref		= 0x01,
-	Y_Axis_Ref		= 0x02,
-	Z_Axis_Ref		= 0x03,
-	Ext_32_768KHz	= 0x04,
-	Ext_19_2MHz		= 0x05,
+	X_Axis_Ref		  = 0x01,
+	Y_Axis_Ref		  = 0x02,
+	Z_Axis_Ref		  = 0x03,
+	Ext_32_768KHz	  = 0x04,
+	Ext_19_2MHz		  = 0x05,
 	TIM_GENT_INREST	= 0x07
 };
 
@@ -79,19 +79,19 @@ enum accel_FullScale_ENUM
 //5- Digital Low Pass Filter ENUM
 enum DLPF_CFG_ENUM
 {
-	DLPF_260A_256G_Hz 	= 0x00,
-	DLPF_184A_188G_Hz 	= 0x01,
+	DLPF_260A_256G_Hz = 0x00,
+	DLPF_184A_188G_Hz = 0x01,
 	DLPF_94A_98G_Hz 	= 0x02,
 	DLPF_44A_42G_Hz 	= 0x03,
 	DLPF_21A_20G_Hz 	= 0x04,
-	DLPF_10_Hz 			= 0x05,
+	DLPF_10_Hz 			  = 0x05,
 	DLPF_5_Hz 		  	= 0x06
 };
 
 //6- e external Frame Synchronization ENUM
 enum EXT_SYNC_SET_ENUM
 {
-	input_Disable 	= 0x00,
+	input_Disable = 0x00,
 	TEMP_OUT_L		= 0x01,
 	GYRO_XOUT_L		= 0x02,
 	GYRO_YOUT_L		= 0x03,
@@ -182,7 +182,7 @@ base_status_t mpu9250_config(mpu9250_t *me, MPU_ConfigTypeDef *config)
 	//Select the Accelerometer Full Scale Range
 	Buffer = 0;
 	Buffer = (config->Accel_Full_Scale << 3) & 0x18;
-  	CHECK_STATUS(m_mpu9250_write_reg(me, MPU9250_REG_ACCEL_CONFIG, &Buffer, 1));
+  CHECK_STATUS(m_mpu9250_write_reg(me, MPU9250_REG_ACCEL_CONFIG, &Buffer, 1));
 
 	//Set SRD To Default
 	MPU9250_Set_SMPRT_DIV(0x04);
