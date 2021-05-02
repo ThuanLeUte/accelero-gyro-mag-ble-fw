@@ -16,18 +16,18 @@
 /* Private defines ---------------------------------------------------- */
 //Define Registers
 #define MPU9250_REG_WHO_AM_I                    (0x75)
-#define MPU9250_REG_PWR_MAGT_1		              (0x6B)
-#define MPU9250_REG_CONFIG			                (0x1A)
-#define MPU9250_REG_GYRO_CONFIG		              (0x1B)
-#define MPU9250_REG_ACCEL_CONFIG	              (0x1C)
-#define MPU9250_REG_SMPLRT_DIV		              (0x19)
-#define MPU9250_REG_INT_STATUS		              (0x3A)
-#define MPU9250_REG_ACCEL_XOUT_H	              (0x3B)
-#define MPU9250_REG_TEMP_OUT_H		              (0x41)
-#define MPU9250_REG_GYRO_XOUT_H		              (0x43)
-#define MPU9250_REG_FIFO_EN 		                (0x23)
-#define MPU9250_REG_INT_ENABLE 		              (0x38)
-#define MPU9250_REG_I2CMACO 	  	              (0x23)
+#define MPU9250_REG_PWR_MAGT_1		            (0x6B)
+#define MPU9250_REG_CONFIG			            (0x1A)
+#define MPU9250_REG_GYRO_CONFIG		            (0x1B)
+#define MPU9250_REG_ACCEL_CONFIG	            (0x1C)
+#define MPU9250_REG_SMPLRT_DIV		            (0x19)
+#define MPU9250_REG_INT_STATUS		            (0x3A)
+#define MPU9250_REG_ACCEL_XOUT_H	            (0x3B)
+#define MPU9250_REG_TEMP_OUT_H		            (0x41)
+#define MPU9250_REG_GYRO_XOUT_H		            (0x43)
+#define MPU9250_REG_FIFO_EN 		            (0x23)
+#define MPU9250_REG_INT_ENABLE 		            (0x38)
+#define MPU9250_REG_I2CMACO 	  	            (0x23)
 #define MPU9250_REG_USER_CNT                    (0x6A)
 #define MPU9250_REG_FIFO_COUNTH                 (0x72)
 #define MPU9250_REG_FIFO_R_W                    (0x74)
@@ -81,17 +81,17 @@ enum DLPF_CFG_ENUM
 {
 	DLPF_260A_256G_Hz 	= 0x00,
 	DLPF_184A_188G_Hz 	= 0x01,
-	DLPF_94A_98G_Hz 	  = 0x02,
-	DLPF_44A_42G_Hz 	  = 0x03,
-	DLPF_21A_20G_Hz 	  = 0x04,
-	DLPF_10_Hz 			    = 0x05,
-	DLPF_5_Hz 		  	  = 0x06
+	DLPF_94A_98G_Hz 	= 0x02,
+	DLPF_44A_42G_Hz 	= 0x03,
+	DLPF_21A_20G_Hz 	= 0x04,
+	DLPF_10_Hz 			= 0x05,
+	DLPF_5_Hz 		  	= 0x06
 };
 
 //6- e external Frame Synchronization ENUM
 enum EXT_SYNC_SET_ENUM
 {
-	input_Disable = 0x00,
+	input_Disable 	= 0x00,
 	TEMP_OUT_L		= 0x01,
 	GYRO_XOUT_L		= 0x02,
 	GYRO_YOUT_L		= 0x03,
@@ -160,7 +160,8 @@ base_status_t mpu9250_config(mpu9250_t *me, MPU_ConfigTypeDef *config)
   
 	//Clock Source
 	//Reset Device
-	I2C_Write8(MPU9250_REG_PWR_MAGT_1, 0x80);
+  CHECK_STATUS(m_mpu9250_write_reg(me, MPU9250_REG_PWR_MAGT_1, &Buffer, 0x80));
+
 	HAL_Delay(100);
 	Buffer = config->ClockSource & 0x07;			//change the 7th bits of register
 	Buffer |= (config->Sleep_Mode_Bit << 6) & 0x40; // change only the 7th bit in the register
@@ -171,7 +172,7 @@ base_status_t mpu9250_config(mpu9250_t *me, MPU_ConfigTypeDef *config)
 	//Set the Digital Low Pass Filter
 	Buffer = 0;
 	Buffer = config->CONFIG_DLPF & 0x07;
-  CHECK_STATUS(m_mpu9250_write_reg(me, MPU9250_REG_CONFIG, &Buffer, 1));
+ 	 CHECK_STATUS(m_mpu9250_write_reg(me, MPU9250_REG_CONFIG, &Buffer, 1));
 
 	//Select the Gyroscope Full Scale Range
 	Buffer = 0;
@@ -181,7 +182,7 @@ base_status_t mpu9250_config(mpu9250_t *me, MPU_ConfigTypeDef *config)
 	//Select the Accelerometer Full Scale Range
 	Buffer = 0;
 	Buffer = (config->Accel_Full_Scale << 3) & 0x18;
-  CHECK_STATUS(m_mpu9250_write_reg(me, MPU9250_REG_ACCEL_CONFIG, &Buffer, 1));
+  	CHECK_STATUS(m_mpu9250_write_reg(me, MPU9250_REG_ACCEL_CONFIG, &Buffer, 1));
 
 	//Set SRD To Default
 	MPU9250_Set_SMPRT_DIV(0x04);
@@ -236,7 +237,7 @@ base_status_t mpu9250_config(mpu9250_t *me, MPU_ConfigTypeDef *config)
 //Get Sample Rate Divider
 base_status_t MPU9250_Get_SMPRT_DIV(mpu9250_t *me,  uint8_t Buffer)
 {
-  CHECK_STATUS(m_mpu9250_read_reg(me, MPU9250_REG_SMPLRT_DIV, &Buffer, 1));
+	CHECK_STATUS(m_mpu9250_read_reg(me, MPU9250_REG_SMPLRT_DIV, &Buffer, 1));
 
 	return BS_OK;
 }

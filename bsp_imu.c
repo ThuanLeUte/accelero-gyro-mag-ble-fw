@@ -21,8 +21,6 @@
 static mpu9250_t m_mpu9250;
 MPU_ConfigTypeDef myMpuConfig;
 
-
-
 /* Private function prototypes ---------------------------------------- */
 /* Function definitions ----------------------------------------------- */
 base_status_t bsp_imu_init(void)
@@ -44,9 +42,8 @@ base_status_t bsp_imu_init(void)
 base_status_t bsp_gyro_accel_get(ScaledData_Def myAccelScaled, ScaledData_Def myGyroScaled)
 {
   MPU9250_Get_Accel_Scale(&myAccelScaled);
-	MPU9250_Get_Gyro_Scale(&myGyroScaled);
+  MPU9250_Get_Gyro_Scale(&myGyroScaled);
 }
-
 
 /* Private function definitions ---------------------------------------- */
 /* End of file -------------------------------------------------------- */
