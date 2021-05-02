@@ -39,6 +39,8 @@ extern "C" {
  */
 base_status_t bsp_imu_init(void);
 
+base_status_t bsp_gyro_accel_get(ScaledData_Def myAccelScaled, ScaledData_Def myGyroScaled);
+
 /* -------------------------------------------------------------------------- */
 #ifdef __cplusplus
 } // extern "C"
