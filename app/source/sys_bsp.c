@@ -15,18 +15,9 @@
 #include "sys_bsp.h"
 
 /* Private defines ---------------------------------------------------- */
-#ifdef  TEMPERATURE_BOARD
-
-#define NRF_SCL_PIN             16    // SCL signal pin
-#define NRF_SDA_PIN             15    // SDA signal pin
-
-#else
-
-#define NRF_SCL_PIN             15    // SCL signal pin
-#define NRF_SDA_PIN             16    // SDA signal pin
-#define OB1203_INTR_PIN         12    // OB1203 interrupt pin
-
-#endif
+#define NRF_SCL_PIN             11    // SCL signal pin
+#define NRF_SDA_PIN             12    // SDA signal pin
+#define OB1203_INTR_PIN         13    // OB1203 interrupt pin
 
 #define TWI_INSTANCE_ID         0
 

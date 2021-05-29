@@ -53,7 +53,7 @@ static void m_saadc_event_handler(nrf_drv_saadc_evt_t const * p_evt);
 void sys_bm_init(void)
 {
   nrf_saadc_channel_config_t config =
-      BATTERY_CHANNEL_CONFIG(NRF_SAADC_INPUT_AIN5);
+      BATTERY_CHANNEL_CONFIG(NRF_SAADC_INPUT_AIN2);
 
   ret_code_t err_code = nrf_drv_saadc_init(NULL, m_saadc_event_handler);
 
