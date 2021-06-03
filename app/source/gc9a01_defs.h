@@ -53,7 +53,7 @@ enum GC9A01_CMD
 
 /* Public macros ------------------------------------------------------ */
 /* Public variables --------------------------------------------------- */
-const gc9a01_function_t GC9A01_CFG_SCRIPT[] =
+static const gc9a01_function_t GC9A01_CFG_SCRIPT[] =
 {
     {GC9A01_START, GC9A01_START},
     {GC9A01_CMD, 0xEF},

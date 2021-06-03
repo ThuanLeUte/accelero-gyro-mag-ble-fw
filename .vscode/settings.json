@@ -1,5 +1,10 @@
 {
     "files.associations": {
-        "mpu9250.h": "c"
+        "mpu9250.h": "c",
+        "bsp.h": "c",
+        "nrf_drv_spi.h": "c",
+        "gc9a01.h": "c",
+        "gc9a01_defs.h": "c",
+        "bsp_lcd.h": "c"
     }
 }

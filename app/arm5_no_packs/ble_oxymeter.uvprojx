@@ -409,11 +409,6 @@
               <FilePath>..\source\sys_temp.c</FilePath>
             </File>
             <File>
-              <FileName>sys_bsp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\source\sys_bsp.c</FilePath>
-            </File>
-            <File>
               <FileName>sys_bm.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\source\sys_bm.c</FilePath>
@@ -432,6 +427,21 @@
               <FileName>sys_po.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\source\sys_po.c</FilePath>
+            </File>
+            <File>
+              <FileName>gc9a01.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\source\gc9a01.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\source\bsp.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_lcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\source\bsp_lcd.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1622,6 +1632,16 @@
               <FileName>nrfx_saadc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\modules\nrfx\drivers\src\nrfx_saadc.c</FilePath>
+            </File>
+            <File>
+              <FileName>nrf_drv_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\integration\nrfx\legacy\nrf_drv_spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>nrfx_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\modules\nrfx\drivers\src\nrfx_spi.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4076,11 +4096,6 @@
               <FilePath>..\source\sys_temp.c</FilePath>
             </File>
             <File>
-              <FileName>sys_bsp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\source\sys_bsp.c</FilePath>
-            </File>
-            <File>
               <FileName>sys_bm.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\source\sys_bm.c</FilePath>
@@ -4099,6 +4114,21 @@
               <FileName>sys_po.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\source\sys_po.c</FilePath>
+            </File>
+            <File>
+              <FileName>gc9a01.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\source\gc9a01.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\source\bsp.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_lcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\source\bsp_lcd.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -5289,6 +5319,16 @@
               <FileName>nrfx_saadc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\modules\nrfx\drivers\src\nrfx_saadc.c</FilePath>
+            </File>
+            <File>
+              <FileName>nrf_drv_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\integration\nrfx\legacy\nrf_drv_spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>nrfx_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\modules\nrfx\drivers\src\nrfx_spi.c</FilePath>
             </File>
           </Files>
         </Group>

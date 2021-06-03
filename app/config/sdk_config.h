@@ -3642,7 +3642,7 @@
 // <e> NRFX_SPI_ENABLED - nrfx_spi - SPI peripheral driver
 //==========================================================
 #ifndef NRFX_SPI_ENABLED
-#define NRFX_SPI_ENABLED 0
+#define NRFX_SPI_ENABLED 1
 #endif
 // <q> NRFX_SPI0_ENABLED  - Enable SPI0 instance
  
@@ -3655,7 +3655,7 @@
  
 
 #ifndef NRFX_SPI1_ENABLED
-#define NRFX_SPI1_ENABLED 0
+#define NRFX_SPI1_ENABLED 1
 #endif
 
 // <q> NRFX_SPI2_ENABLED  - Enable SPI2 instance
@@ -4263,7 +4263,7 @@
  
 
 #ifndef NRFX_TWI1_ENABLED
-#define NRFX_TWI1_ENABLED 1
+#define NRFX_TWI1_ENABLED 0
 #endif
 
 // <o> NRFX_TWI_DEFAULT_CONFIG_FREQUENCY  - Frequency
@@ -5474,7 +5474,7 @@
 // <e> SPI_ENABLED - nrf_drv_spi - SPI/SPIM peripheral driver - legacy layer
 //==========================================================
 #ifndef SPI_ENABLED
-#define SPI_ENABLED 0
+#define SPI_ENABLED 1
 #endif
 // <o> SPI_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
  
@@ -5512,7 +5512,7 @@
  
 
 #ifndef SPI0_USE_EASY_DMA
-#define SPI0_USE_EASY_DMA 1
+#define SPI0_USE_EASY_DMA 0
 #endif
 
 // </e>
@@ -5520,13 +5520,13 @@
 // <e> SPI1_ENABLED - Enable SPI1 instance
 //==========================================================
 #ifndef SPI1_ENABLED
-#define SPI1_ENABLED 0
+#define SPI1_ENABLED 1
 #endif
 // <q> SPI1_USE_EASY_DMA  - Use EasyDMA
  
 
 #ifndef SPI1_USE_EASY_DMA
-#define SPI1_USE_EASY_DMA 1
+#define SPI1_USE_EASY_DMA 0
 #endif
 
 // </e>
@@ -5556,7 +5556,7 @@
 // <i> https://infocenter.nordicsemi.com/
 
 #ifndef SPIM_NRF52_ANOMALY_109_WORKAROUND_ENABLED
-#define SPIM_NRF52_ANOMALY_109_WORKAROUND_ENABLED 0
+#define SPIM_NRF52_ANOMALY_109_WORKAROUND_ENABLED 1
 #endif
 
 // </e>
@@ -5806,7 +5806,7 @@
 // <e> TWI1_ENABLED - Enable TWI1 instance
 //==========================================================
 #ifndef TWI1_ENABLED
-#define TWI1_ENABLED 1
+#define TWI1_ENABLED 0
 #endif
 // <q> TWI1_USE_EASY_DMA  - Use EasyDMA (if present)
  

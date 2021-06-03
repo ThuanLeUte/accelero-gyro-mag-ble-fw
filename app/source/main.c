@@ -35,12 +35,12 @@
 #include "ble_blood_oxygen_service.h"
 #include "ble_heart_rate_service.h"
 #include "ble_body_temp_service.h"
-#include "sys_bsp.h"
+#include "bsp.h"
 #include "sys_temp.h"
-#include "sys_temp_humi.h"
 #include "sys_bm.h"
 #include "sys_po.h"
 #include "nrf52832_peripherals.h"
+#include "bsp_lcd.h"
 
 #if defined(UART_PRESENT)
 #include "nrf_uart.h"
@@ -158,8 +158,9 @@ int main(void)
   advertising_init();
   conn_params_init();
 
-  sys_bsp_init();          // Bsp init
-  sys_bm_init();           // Battery monitor init
+  bsp_hw_init();          // Bsp init
+  sys_bm_init();          // Battery monitor init
+  bsp_lcd_init();         // LCD init
 
   // Start execution.
   application_timers_start();

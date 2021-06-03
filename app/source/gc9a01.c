@@ -12,9 +12,11 @@
 
 /* Includes ----------------------------------------------------------- */
 #include "gc9a01.h"
+#include "bsp_io_11.h"
 
 /* Private defines ---------------------------------------------------- */
-#define DC_PIN    (10)
+#define GC9A01_CMD_MODE    (0)
+#define GC9A01_DATA_MODE   (1)
 
 /* Private enumerate/structure ---------------------------------------- */
 /* Private macros ----------------------------------------------------- */
@@ -23,6 +25,7 @@
 /* Private function prototypes ---------------------------------------- */
 static base_status_t m_gc9a01_write_cmd(gc9a01_t *me, uint8_t cmd);
 static base_status_t m_gc9a01_write_data(gc9a01_t *me, uint8_t data);
+static base_status_t m_gc9a01_run_cfg_script(gc9a01_t *me);
 
 /* Function definitions ----------------------------------------------- */
 base_status_t gc9a01_init(gc9a01_t *me)
@@ -49,7 +52,7 @@ base_status_t gc9a01_init(gc9a01_t *me)
  */
 static base_status_t m_gc9a01_run_cfg_script(gc9a01_t *me)
 {
-  int i = 0;
+  int i          = 0;
   int end_script = 0;
 
   do
@@ -57,21 +60,28 @@ static base_status_t m_gc9a01_run_cfg_script(gc9a01_t *me)
     switch (GC9A01_CFG_SCRIPT[i].cmd)
     {
     case GC9A01_START:
+      NRF_LOG_INFO("GC9A01_START");
       break;
     case GC9A01_CMD:
+      NRF_LOG_INFO("GC9A01_CMD");
       m_gc9a01_write_cmd(me, GC9A01_CFG_SCRIPT[i].data & 0xFF);
       break;
     case GC9A01_DATA:
+      NRF_LOG_INFO("GC9A01_DATA");
       m_gc9a01_write_data(me, GC9A01_CFG_SCRIPT[i].data & 0xFF);
       break;
     case GC9A01_DELAY:
+      NRF_LOG_INFO("GC9A01_DELAY");
       me->delay_ms(GC9A01_CFG_SCRIPT[i].data);
       break;
     case GC9A01_END:
+      NRF_LOG_INFO("GC9A01_END");
       end_script = 1;
+      break;
     }
     i++;
-  } while (!end_script);
+  }
+  while (!end_script);
 
   return BS_OK;
 }
@@ -90,8 +100,9 @@ static base_status_t m_gc9a01_run_cfg_script(gc9a01_t *me)
  */
 static base_status_t m_gc9a01_write_cmd(gc9a01_t *me, uint8_t cmd)
 {
-  me->gpio_write(DC_PIN, 0);
+  me->gpio_write(IO_LCD_DC, GC9A01_CMD_MODE);
   CHECK(BS_OK == me->spi_send(cmd), BS_ERROR);
+
   return BS_OK;
 }
 
@@ -109,8 +120,9 @@ static base_status_t m_gc9a01_write_cmd(gc9a01_t *me, uint8_t cmd)
  */
 static base_status_t m_gc9a01_write_data(gc9a01_t *me, uint8_t data)
 {
-  me->gpio_write(DC_PIN, 1);
+  me->gpio_write(IO_LCD_DC, GC9A01_DATA_MODE);
   CHECK(BS_OK == me->spi_send(data), BS_ERROR);
+
   return BS_OK;
 }
 

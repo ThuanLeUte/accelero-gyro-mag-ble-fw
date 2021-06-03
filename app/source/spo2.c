@@ -17,7 +17,7 @@
 #include "spo2.h"
 #include "ob1203.h"
 #include "kalman.h"
-#include "sys_bsp.h"
+#include "bsp.h"
 
 /* Private defines ---------------------------------------------------- */
 /* Private enumerate/structure ---------------------------------------- */
@@ -240,7 +240,7 @@ void spo2_do_algorithm_part2(void)
   int16_t slopes[3]     = { 2, 0, -2 };
   uint8_t subtract_avg  = 0;
   uint8_t lengths[3];
-  p2_start_time = sys_bsp_time_now();
+  p2_start_time = bsp_time_now();
 
   if (kalman_filters[corr_filt].kalman_avg > 0)
   {                                                                                                                 // Changed this to symmetrical triangle--it filters dicrotic notch better than asymmetric matched filter
@@ -843,7 +843,7 @@ static void m_spo2_fine_search(int16_t *x, uint16_t len, uint16_t start_offset, 
   int32_t lowest;
   final_correl = start_correl;
   final_offset = start_offset;
-  uint16_t elapsed_time = sys_bsp_time_now() - p2_start_time;
+  uint16_t elapsed_time = bsp_time_now() - p2_start_time;
   int32_t y[3];
 
   if (elapsed_time >= 15)
@@ -1006,7 +1006,7 @@ static uint8_t m_spo2_find_max_corr(int16_t *x, uint16_t max_length, uint16_t of
     while (!rising)
     {                                    // Keep going until you find a minimum
       step += (step < max_step) ? 1 : 0; // Increment step size if less than max step
-      uint16_t elapsed_time = sys_bsp_time_now() - p2_start_time;
+      uint16_t elapsed_time = bsp_time_now() - p2_start_time;
 
       try_offset += step; // Increment by step size
       if (try_offset > MAX_OFFSET || (elapsed_time >= 15))
@@ -1041,7 +1041,7 @@ static uint8_t m_spo2_find_max_corr(int16_t *x, uint16_t max_length, uint16_t of
     while (rising)
     {
       // Keep going until you find a drop
-      uint16_t elapsed_time = sys_bsp_time_now() - p2_start_time;
+      uint16_t elapsed_time = bsp_time_now() - p2_start_time;
       try_offset += step;
       step += (step < max_step) ? 1 : 0; // Increment step size if less than max step
       if ((try_offset > MAX_OFFSET) || ((elapsed_time >= 15)))

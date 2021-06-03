@@ -19,7 +19,7 @@
 #include "spo2.h"
 #include "sys_po.h"
 #include "kalman.h"
-#include "sys_bsp.h"
+#include "bsp.h"
 #include "nrf_delay.h"
 #include "nrf_pwr_mgmt.h"
 
@@ -201,8 +201,8 @@ void m_sys_po_prox_event(void)
 ob1203_status_t m_sys_po_init(void)
 {
   m_ob1203.device_address = OB1203_I2C_ADDR;
-  m_ob1203.i2c_read       = sys_bsp_i2c_read;
-  m_ob1203.i2c_write      = sys_bsp_i2c_write;
+  m_ob1203.i2c_read       = bsp_i2c_read;
+  m_ob1203.i2c_write      = bsp_i2c_write;
 
   return ob1203_init(&m_ob1203);
 }
@@ -284,7 +284,7 @@ void m_sys_po_config(void)
 
   // Run initialization according to user compile settings
   uint8_t reg_data[2];
-  sys_bsp_i2c_read(OB1203_I2C_ADDR, OB1203_REG_DIG_LED1_TRIM, reg_data, 2);
+  bsp_i2c_read(OB1203_I2C_ADDR, OB1203_REG_DIG_LED1_TRIM, reg_data, 2);
   m_ob1203.reg.led1_orig_trim = reg_data[0];
   m_ob1203.reg.led2_orig_trim = reg_data[1];
 
@@ -453,7 +453,7 @@ void m_sys_po_get_sensor_data(void)
 
 }
 
-void sys_bsp_intr_pin_handler(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action)
+void bsp_intr_pin_handler(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action)
 {
   p_intr_event();
 }

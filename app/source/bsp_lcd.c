@@ -1,41 +1,47 @@
 /**
- * @file       sys_temp.c
+ * @file       bsp_lcd.c
  * @copyright  Copyright (C) 2020 ThuanLe. All rights reserved.
  * @license    This project is released under the ThuanLe License.
  * @version    1.0.0
  * @date       2021-01-23
  * @author     Thuan Le
- * @brief      Sytem module to handle human body temperature sensor
+ * @brief      Board Support LCD
+ * 
  * @note       None
  * @example    None
  */
 
 /* Includes ----------------------------------------------------------- */
-#include "sys_temp.h"
-#include "bsp.h"
+#include "bsp_lcd.h"
 
 /* Private defines ---------------------------------------------------- */
+gc9a01_t m_gc9a01;
+
 /* Private enumerate/structure ---------------------------------------- */
 /* Private macros ----------------------------------------------------- */
 /* Public variables --------------------------------------------------- */
 /* Private variables -------------------------------------------------- */
-static max30205_t m_max30205;
-
 /* Private function prototypes ---------------------------------------- */
 /* Function definitions ----------------------------------------------- */
-max30205_status_t sys_temp_init(void)
+void bsp_lcd_init(void)
 {
-  m_max30205.device_address = MAX30205_I2C_ADDR;
-  m_max30205.i2c_read       = bsp_i2c_read;
-  m_max30205.i2c_write      = bsp_i2c_write;
+  m_gc9a01.delay_ms   = bsp_delay_ms;
+  m_gc9a01.gpio_write = bsp_gpio_write;
+  m_gc9a01.spi_send   = bsp_spi_write;
 
-  return max30205_init(&m_max30205);
-}
-
-max30205_status_t sys_temp_get(float *temp)
-{
-  return max30205_get_temperature(&m_max30205, temp);
+  gc9a01_init(&m_gc9a01);
 }
 
 /* Private function definitions ---------------------------------------- */
+/**
+ * @brief         I2C init
+ *
+ * @param[in]     None
+ *
+ * @attention     None
+ *
+ * @return        None
+ */
+
+
 /* End of file -------------------------------------------------------- */
