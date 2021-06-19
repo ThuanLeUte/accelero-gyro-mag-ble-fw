@@ -61,9 +61,9 @@ uint32_t bsp_time_now(void)
   return app_timer_cnt_get();
 }
 
-base_status_t bsp_spi_write(uint8_t tx_data)
+base_status_t bsp_spi_write(uint8_t *tx_data, uint16_t len)
 {
-  nrf_drv_spi_transfer(&m_spi, &tx_data, 1, NULL, 0);
+  nrf_drv_spi_transfer(&m_spi, tx_data, len, NULL, 0);
   
   return BS_OK;
 }

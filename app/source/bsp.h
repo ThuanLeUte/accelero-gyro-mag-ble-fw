@@ -129,7 +129,7 @@ void bsp_delay_ms(uint32_t ms);
 
 void bsp_gpio_write(uint8_t pin , uint8_t state);
 
-base_status_t bsp_spi_write(uint8_t tx_data);
+base_status_t bsp_spi_write(uint8_t *tx_data, uint16_t len);
 
 /* -------------------------------------------------------------------------- */
 #ifdef __cplusplus

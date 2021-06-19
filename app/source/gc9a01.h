@@ -31,7 +31,7 @@ typedef struct
   uint8_t  device_address;  // I2C device address
 
   // Send one byte via SPI bus
-  base_status_t (*spi_send) (uint8_t tx_data);
+  base_status_t (*spi_send) (uint8_t *tx_data, uint16_t len);
 
   // Delay ms
   void (*delay_ms) (uint32_t ms);
@@ -47,7 +47,7 @@ gc9a01_t;
 /**
  * @brief         Initialize GC9A01
  *
- * @param[in]     me            Pointer to handle of GC9A01 module.
+ * @param[in]     me     Pointer to handle of GC9A01 module.
  *
  * @attention     None
  *
@@ -56,6 +56,63 @@ gc9a01_t;
  * - BS_ERROR
  */
 base_status_t gc9a01_init(gc9a01_t *me);
+
+/**
+ * @brief         Display contro
+ *
+ * @param[in]     me      Pointer to handle of GC9A01 module.
+ * @param[in]     enable  Enable display
+ *
+ * @attention     None
+ *
+ * @return
+ * - BS_OK
+ * - BS_ERROR
+ */
+base_status_t gc9a01_display_control(gc9a01_t *me, bool enable);
+
+/**
+ * @brief         GC9A01 write comamnd
+ *
+ * @param[in]     me      Pointer to handle of GC9A01 module.
+ * @param[in]     cmd     Comamnd
+ *
+ * @attention     None
+ *
+ * @return
+ * - BS_OK
+ * - BS_ERROR
+ */
+base_status_t gc9a01_write_cmd(gc9a01_t *me, uint8_t cmd);
+
+/**
+ * @brief         GC9A01 write 1 byte data
+ *
+ * @param[in]     me      Pointer to handle of GC9A01 module.
+ * @param[in]     data    Data to write
+ *
+ * @attention     None
+ *
+ * @return
+ * - BS_OK
+ * - BS_ERROR
+ */
+base_status_t gc9a01_write_data_byte(gc9a01_t *me, uint8_t data);
+
+/**
+ * @brief         GC9A01 write data
+ *
+ * @param[in]     me      Pointer to handle of GC9A01 module.
+ * @param[in]     data    Pointer to data
+ * @param[in]     len     Data lenght
+ *
+ * @attention     None
+ *
+ * @return
+ * - BS_OK
+ * - BS_ERROR
+ */
+base_status_t gc9a01_write_data(gc9a01_t *me, uint8_t *data, uint16_t len);
 
 /* -------------------------------------------------------------------------- */
 #ifdef __cplusplus
