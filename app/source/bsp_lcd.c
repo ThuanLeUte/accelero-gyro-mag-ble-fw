@@ -17,6 +17,7 @@
 
 /* Private defines ---------------------------------------------------- */
 #define pgm_read_byte(addr) (*(const unsigned char *)(addr))
+#define pgm_read_word(addr) (*(const uint16_t *)(addr))
 
 #define LCD_WIDTH            (240)
 #define LCD_HEIGHT           (240)
@@ -88,17 +89,23 @@ void bsp_lcd_init(void)
 
   bsp_lcd_fill(LCD_WHITE);
 
-  bsp_lcd_draw_circle(120, 120, 110, 1, LCD_RED);
+  // bsp_lcd_draw_circle(120, 120, 110, 1, LCD_RED);
 
-   for (uint8_t i = 0; i < sizeof(COLOR_TABLE) / sizeof(COLOR_TABLE[0]); i++)
-    {
-      bsp_lcd_fill(COLOR_TABLE[i]);
-      bsp_lcd_write_string(30, 50, "Temperature:", LCD_RED, COLOR_TABLE[i], 2);
-      bsp_lcd_write_string(30, 100, "SPO2:", LCD_RED, COLOR_TABLE[i], 2);
-      bsp_lcd_write_string(30, 150, "Heart Rate:", LCD_RED, COLOR_TABLE[i], 2);
-      bsp_lcd_write_string(50, 200, "Step:", LCD_RED, COLOR_TABLE[i], 2);
-      bsp_delay_ms(1000);
-    }
+  bsp_lcd_write_string(80, 70, "98%", LCD_RED, LCD_WHITE, 5);
+  bsp_lcd_write_string(13, 125, "BLOOD OXIGEN LEVEL", LCD_RED, LCD_WHITE, 2);
+  bsp_lcd_write_string(100, 200, "78 BPM", LCD_RED, LCD_WHITE, 2);
+
+  // bsp_lcd_draw_image(0, 0, LCD_WIDTH, LCD_HEIGHT, image3);
+
+  // for (uint8_t i = 0; i < sizeof(COLOR_TABLE) / sizeof(COLOR_TABLE[0]); i++)
+  // {
+  //   bsp_lcd_fill(COLOR_TABLE[i]);
+  //   bsp_lcd_write_string(30, 50, "Temperature:", LCD_RED, COLOR_TABLE[i], 2);
+  //   bsp_lcd_write_string(30, 100, "SPO2:", LCD_RED, COLOR_TABLE[i], 2);
+  //   bsp_lcd_write_string(30, 150, "Heart Rate:", LCD_RED, COLOR_TABLE[i], 2);
+  //   bsp_lcd_write_string(50, 200, "Step:", LCD_RED, COLOR_TABLE[i], 2);
+  //   bsp_delay_ms(1000);
+  // }
 }
 
 void bsp_lcd_fill(uint16_t color)
@@ -118,10 +125,10 @@ void bsp_lcd_fill(uint16_t color)
 void bsp_lcd_write_char(uint16_t x, uint16_t y, unsigned c,
                         uint16_t color, uint16_t bg, uint8_t size)
 {
-  if ((x >= LCD_WIDTH) ||         // Clip right
-      (y >= LCD_HEIGHT) ||        // Clip bottom
-      ((x + 6 * size - 1) < 0) || // Clip left
-      ((y + 8 * size - 1) < 0))   // Clip top
+  if ((x >= LCD_WIDTH)          || // Clip right
+      (y >= LCD_HEIGHT)         || // Clip bottom
+      ((x + 6 * size - 1) < 0)  || // Clip left
+      ((y + 8 * size - 1) < 0))    // Clip top
     return;
 
   for (int8_t i = 0; i < 6; i++)
@@ -222,6 +229,27 @@ void bsp_lcd_draw_circle_helper(uint16_t x0, uint16_t y0, uint16_t r,
     {
       bsp_lcd_write_pixel(x0 - y, y0 - x, 1, color);
       bsp_lcd_write_pixel(x0 - x, y0 - y, 1, color);
+    }
+  }
+}
+
+void bsp_lcd_draw_image(uint16_t x0, uint16_t y0, uint16_t x1,
+                        uint16_t y1, const short unsigned A[])
+{
+  int k = 0;
+  uint16_t data;
+
+  bsp_lcd_address_set(x0, y0, x1 - 1, y1 - 1);
+  gc9a01_write_cmd(&m_gc9a01, GC9A01_MEMORY_WRITE);
+
+  for (uint16_t i = x0; i < x1; i++)
+  {
+    for (uint16_t j = y0; j < y1; j++)
+    {
+      data = (uint16_t)pgm_read_word(A + k);
+
+      gc9a01_write_data(&m_gc9a01,(uint8_t *)&data , 2);
+      k++;
     }
   }
 }

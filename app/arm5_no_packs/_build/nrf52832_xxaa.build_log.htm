@@ -29,10 +29,13 @@ Project File Date:  06/03/2021
 Build target 'nrf52832_xxaa'
 Note: source file '..\..\components\libraries\bsp\bsp.c' - object file renamed from '.\_build\bsp.o' to '.\_build\bsp_1.o'.
 compiling bsp_lcd.c...
+..\source\bsp_lcd.c(47): warning:  #177-D: variable "COLOR_TABLE"  was declared but never referenced
+  static const uint16_t COLOR_TABLE[] =
+..\source\bsp_lcd.c: 1 warning, 0 errors
 linking...
-Program Size: Code=41776 RO-data=5776 RW-data=624 ZI-data=18088  
+Program Size: Code=41344 RO-data=5744 RW-data=624 ZI-data=18088  
 FromELF: creating hex file...
-".\_build\nrf52832_xxaa.axf" - 0 Error(s), 0 Warning(s).
+".\_build\nrf52832_xxaa.axf" - 0 Error(s), 1 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -58,11 +61,11 @@ Package Vendor: NordicSemiconductor
    * Component: ARM::CMSIS:CORE:5.3.0
 
    * Component: NordicSemiconductor::Device:Startup:8.35.0
-      Source file:   Device\Source\arm\arm_startup_nrf52.s
       Include file:  Device\Include\system_nrf.h
-      Source file:   Device\Source\system_nrf52.c
       Include file:  Device\Include\system_nrf52.h
-Build Time Elapsed:  00:00:02
+      Source file:   Device\Source\arm\arm_startup_nrf52.s
+      Source file:   Device\Source\system_nrf52.c
+Build Time Elapsed:  00:00:03
 </pre>
 </body>
 </html>

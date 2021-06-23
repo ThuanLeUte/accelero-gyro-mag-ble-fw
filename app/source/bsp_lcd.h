@@ -83,9 +83,14 @@ void bsp_lcd_write_string(uint16_t x, uint16_t y, const char c[],
                           uint16_t color, uint16_t bgcolor, uint8_t size);
 
 
-void bsp_lcd_draw_circle_helper(uint16_t x0, uint16_t y0, uint16_t r, uint8_t cornername, uint16_t color);
+void bsp_lcd_draw_circle_helper(uint16_t x0, uint16_t y0, uint16_t r,
+                                uint8_t cornername, uint16_t color);
 
-void bsp_lcd_draw_circle(uint16_t x0, uint16_t y0, uint16_t r, uint16_t thin, uint16_t color);
+void bsp_lcd_draw_circle(uint16_t x0, uint16_t y0, uint16_t r,
+                         uint16_t thin, uint16_t color);
+
+void bsp_lcd_draw_image(uint16_t x0, uint16_t y0, uint16_t x1,
+                        uint16_t y1, const short unsigned A[]);
 
 /* -------------------------------------------------------------------- */
 #ifdef __cplusplus
