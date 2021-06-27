@@ -22,20 +22,22 @@ Dialog DLL:      TCM.DLL V1.42.0.0
  
 <h2>Project:</h2>
 D:\02_Mega\06_Projects\09_Bio_Education_Board\01_Software\02_Firmware\accelero-gyro-mag-ble-fw\app\arm5_no_packs\ble_oxymeter.uvprojx
-Project File Date:  06/03/2021
+Project File Date:  06/27/2021
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'nrf52832_xxaa'
 Note: source file '..\..\components\libraries\bsp\bsp.c' - object file renamed from '.\_build\bsp.o' to '.\_build\bsp_1.o'.
 compiling bsp_lcd.c...
-..\source\bsp_lcd.c(47): warning:  #177-D: variable "COLOR_TABLE"  was declared but never referenced
+..\source\bsp_lcd.c(49): warning:  #177-D: variable "COLOR_TABLE"  was declared but never referenced
   static const uint16_t COLOR_TABLE[] =
-..\source\bsp_lcd.c: 1 warning, 0 errors
+..\source\bsp_lcd.c(112): warning:  #177-D: function "bsp_lgvl_init"  was declared but never referenced
+  static void bsp_lgvl_init(void)
+..\source\bsp_lcd.c: 2 warnings, 0 errors
 linking...
-Program Size: Code=41344 RO-data=5744 RW-data=624 ZI-data=18088  
+Program Size: Code=41456 RO-data=120944 RW-data=624 ZI-data=18088  
 FromELF: creating hex file...
-".\_build\nrf52832_xxaa.axf" - 0 Error(s), 1 Warning(s).
+".\_build\nrf52832_xxaa.axf" - 0 Error(s), 2 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -61,11 +63,11 @@ Package Vendor: NordicSemiconductor
    * Component: ARM::CMSIS:CORE:5.3.0
 
    * Component: NordicSemiconductor::Device:Startup:8.35.0
-      Include file:  Device\Include\system_nrf.h
-      Include file:  Device\Include\system_nrf52.h
       Source file:   Device\Source\arm\arm_startup_nrf52.s
+      Include file:  Device\Include\system_nrf.h
       Source file:   Device\Source\system_nrf52.c
-Build Time Elapsed:  00:00:03
+      Include file:  Device\Include\system_nrf52.h
+Build Time Elapsed:  00:00:09
 </pre>
 </body>
 </html>

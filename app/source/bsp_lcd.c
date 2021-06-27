@@ -15,6 +15,8 @@
 #include "bsp_lcd.h"
 #include "font.h"
 
+#include "lvgl.h"
+
 /* Private defines ---------------------------------------------------- */
 #define pgm_read_byte(addr) (*(const unsigned char *)(addr))
 #define pgm_read_word(addr) (*(const uint16_t *)(addr))
@@ -78,7 +80,82 @@ gc9a01_t m_gc9a01;
 static void bsp_lcd_write_pixel(uint16_t x, uint16_t y, uint16_t thin, uint16_t color);
 static void bsp_lcd_address_set(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
 
+static void bsp_lgvl_init(void);
+
 /* Function definitions ----------------------------------------------- */
+static void disp_driver_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_color_t * color_p)
+{
+  bsp_lcd_address_set(0, 0, LCD_WIDTH - 1, LCD_HEIGHT - 1);
+  gc9a01_write_cmd(&m_gc9a01, GC9A01_MEMORY_WRITE);
+
+  int32_t len = LCD_WIDTH * LCD_HEIGHT * 2;
+
+  gc9a01_write_data(&m_gc9a01, (uint8_t *)color_p, len);
+
+  lv_disp_flush_ready(disp_drv);
+}
+
+/**
+ * Create a button with a label and react on click event.
+ */
+void lv_example_get_started_1(void)
+{
+  lv_obj_t *btn = lv_btn_create(lv_scr_act()); /*Add a button the current screen*/
+  lv_obj_set_pos(btn, 10, 10);                 /*Set its position*/
+  lv_obj_set_size(btn, 120, 50);               /*Set its size*/
+
+  lv_obj_t *label = lv_label_create(btn); /*Add a label to the button*/
+  lv_label_set_text(label, "Button");     /*Set the labels text*/
+  lv_obj_center(label);
+}
+
+static void bsp_lgvl_init(void)
+{
+  lv_init();
+
+  static lv_color_t buf_1[200];
+  static lv_color_t buf_2[200];
+
+  static lv_disp_draw_buf_t disp_buf;
+  lv_disp_drv_t disp_drv;
+
+  lv_disp_draw_buf_init(&disp_buf, buf_1, buf_2, LV_HOR_RES * LV_VER_RES);
+
+  lv_disp_drv_init(&disp_drv);
+
+  disp_drv.flush_cb = disp_driver_flush;
+  disp_drv.draw_buf = &disp_buf;
+
+  lv_disp_drv_register(&disp_drv);
+
+  lv_example_get_started_1();
+
+  /* use a pretty small demo for monochrome displays */
+  /* Get the current screen  */
+  lv_obj_t *scr = lv_disp_get_scr_act(NULL);
+
+  /*Create a Label on the currently active screen*/
+  lv_obj_t *label1 = lv_label_create(scr);
+  lv_obj_set_pos(label1, 50, 100);   /*Set its position*/
+  lv_obj_set_size(label1, 120, 100); /*Set its size*/
+
+  /*Modify the Label's text*/
+  lv_label_set_text(label1, "Hello\nworld");
+
+  /* Align the Label to the center
+     * NULL means align on parent (which is the screen now)
+     * 0, 0 at the end means an x, y offset after alignment*/
+  lv_obj_align(label1, LV_ALIGN_CENTER, 0, 0);
+
+  while (1)
+  {
+    lv_tick_inc(1);
+    lv_timer_handler();
+    nrf_delay_ms(10);
+  }
+  
+}
+
 void bsp_lcd_init(void)
 {
   m_gc9a01.delay_ms   = bsp_delay_ms;
@@ -89,13 +166,15 @@ void bsp_lcd_init(void)
 
   bsp_lcd_fill(LCD_WHITE);
 
+  // bsp_lgvl_init();
+
   // bsp_lcd_draw_circle(120, 120, 110, 1, LCD_RED);
 
   bsp_lcd_write_string(80, 70, "98%", LCD_RED, LCD_WHITE, 5);
   bsp_lcd_write_string(13, 125, "BLOOD OXIGEN LEVEL", LCD_RED, LCD_WHITE, 2);
   bsp_lcd_write_string(100, 200, "78 BPM", LCD_RED, LCD_WHITE, 2);
 
-  // bsp_lcd_draw_image(0, 0, LCD_WIDTH, LCD_HEIGHT, image3);
+  bsp_lcd_draw_image(0, 0, LCD_WIDTH, LCD_HEIGHT, image3);
 
   // for (uint8_t i = 0; i < sizeof(COLOR_TABLE) / sizeof(COLOR_TABLE[0]); i++)
   // {
