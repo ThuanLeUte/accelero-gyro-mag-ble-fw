@@ -32,6 +32,8 @@ base_status_t mis2dh_init(mis2dh_t *me)
 
   if ((me == NULL) || (me->i2c_read == NULL) || (me->i2c_write == NULL))
     return BS_ERROR;
+  
+  // TODO: Add init code 
 
   return BS_OK;
 }
