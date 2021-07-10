@@ -113,3 +113,5 @@ Objects
 *.l2p
 *.iex
 _build
+
+nrf52832_xxaa.axf

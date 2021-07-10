@@ -23,6 +23,15 @@ extern "C" {
 
 /* Public defines ----------------------------------------------------- */
 /* Public enumerate/structure ----------------------------------------- */
+typedef enum
+{
+  LCD_BATTERY,
+  LCD_SP02_NUM,
+  LCD_HEART_RATE_NUM,
+  LCD_ITEM_CNT
+}
+bsp_lcd_item_t;
+
 /* Public macros ------------------------------------------------------ */
 /* Public variables --------------------------------------------------- */
 /* Public function prototypes ----------------------------------------- */
