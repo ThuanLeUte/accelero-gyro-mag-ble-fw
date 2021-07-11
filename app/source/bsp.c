@@ -164,7 +164,7 @@ static void m_bsp_spi_init(void)
   spi_config.ss_pin    = IO_LCD_CS;
   spi_config.mosi_pin  = IO_LCD_SDA;
   spi_config.sck_pin   = IO_LCD_SCL;
-  spi_config.frequency = NRF_DRV_SPI_FREQ_1M;
+  spi_config.frequency = NRF_DRV_SPI_FREQ_8M;
   spi_config.mode      = NRF_DRV_SPI_MODE_0;
   spi_config.bit_order = NRF_DRV_SPI_BIT_ORDER_MSB_FIRST;
 

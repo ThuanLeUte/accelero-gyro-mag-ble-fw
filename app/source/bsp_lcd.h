@@ -25,6 +25,7 @@ extern "C" {
 /* Public enumerate/structure ----------------------------------------- */
 typedef enum
 {
+  LCD_BACKGROUND,
   LCD_BATTERY,
   LCD_SP02_NUM,
   LCD_HEART_RATE_NUM,
@@ -100,6 +101,11 @@ void bsp_lcd_draw_circle(uint16_t x0, uint16_t y0, uint16_t r,
 
 void bsp_lcd_draw_image(uint16_t x0, uint16_t y0, uint16_t x1,
                         uint16_t y1, const short unsigned A[]);
+
+void bsp_lcd_display_image(bsp_lcd_item_t item);
+void bsp_lcd_draw_number(bsp_lcd_item_t item, uint8_t num);
+#define bsp_lcd_display_spo2_number(num)      bsp_lcd_draw_number(LCD_SP02_NUM, num)
+#define bsp_lcd_display_heartrate_number(num) bsp_lcd_draw_number(LCD_HEART_RATE_NUM , num)
 
 /* -------------------------------------------------------------------- */
 #ifdef __cplusplus

@@ -186,6 +186,8 @@ void sys_po_blood_oxygen_notify(uint8_t blood_oxygen)
 {
   ret_code_t err_code;
 
+  bsp_lcd_display_spo2_number(blood_oxygen);
+
   err_code = ble_bos_blood_oxygen_update(&m_bos, blood_oxygen, BLE_CONN_HANDLE_ALL);
   if ((err_code != NRF_SUCCESS) &&
       (err_code != NRF_ERROR_INVALID_STATE) &&
