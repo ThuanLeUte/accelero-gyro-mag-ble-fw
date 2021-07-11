@@ -67,7 +67,7 @@ typedef struct
 bsp_lcd_t;
 
 /* Private macros ----------------------------------------------------- */
-#define PX_INFO(item, _data, _x_px, _y_px)[item] = { .data = _data, .x_px = _x_px, .y_px = _y_px }
+#define IMG_INFO(item, _data, _x_px, _y_px)[item] = { .data = _data, .x_px = _x_px, .y_px = _y_px }
 #define ITEM_INFO(item, _x_pos, _y_pos, _data, _x_px, _y_px)[item] = { .x_pos = _x_pos, .y_pos = _y_pos, .img.data = _data, .img.x_px = _x_px, .img.y_px = _y_px }
 
 /* Public variables --------------------------------------------------- */
@@ -76,38 +76,38 @@ static gc9a01_t m_gc9a01;
 
 static bsp_lcd_img_t BIG_NUM_TABLE[10] = 
 {
-  //        +====+==========+======+======+
-  //        |NUM |   Data   | X-Px | Y-Px |
-  //        +----+----------+------+------+
-     PX_INFO(0   , num_big_0,    54,    77)
-    ,PX_INFO(1   , num_big_1,    34,    77)
-    ,PX_INFO(2   , num_big_2,    54,    77)
-    ,PX_INFO(3   , num_big_3,    54,    77)
-    ,PX_INFO(4   , num_big_4,    54,    77)
-    ,PX_INFO(5   , num_big_5,    54,    77)
-    ,PX_INFO(6   , num_big_6,    54,    77)
-    ,PX_INFO(7   , num_big_7,    54,    77)
-    ,PX_INFO(8   , num_big_8,    54,    77)
-    ,PX_INFO(9   , num_big_9,    50,    77)
-  //        +====+==========+======+======+
+  //         +====+==========+======+======+
+  //         |NUM |   Data   | X-Px | Y-Px |
+  //         +----+----------+------+------+
+     IMG_INFO(0   , num_big_0,    54,    77)
+    ,IMG_INFO(1   , num_big_1,    34,    77)
+    ,IMG_INFO(2   , num_big_2,    54,    77)
+    ,IMG_INFO(3   , num_big_3,    54,    77)
+    ,IMG_INFO(4   , num_big_4,    54,    77)
+    ,IMG_INFO(5   , num_big_5,    54,    77)
+    ,IMG_INFO(6   , num_big_6,    54,    77)
+    ,IMG_INFO(7   , num_big_7,    54,    77)
+    ,IMG_INFO(8   , num_big_8,    54,    77)
+    ,IMG_INFO(9   , num_big_9,    50,    77)
+  //         +====+==========+======+======+
 };
 
 static bsp_lcd_img_t SMALL_NUM_TABLE[10] = 
 {
-  //        +====+============+======+=====+
-  //        |NUM |   Data     | X-Px | Y-x |
-  //        +----+------------+------+-----+
-     PX_INFO(0   , num_small_0,    54,   77)
-    ,PX_INFO(1   , num_small_1,    34,   77)
-    ,PX_INFO(2   , num_small_2,    54,   77)
-    ,PX_INFO(3   , num_small_3,    54,   77)
-    ,PX_INFO(4   , num_small_4,    54,   77)
-    ,PX_INFO(5   , num_small_5,    54,   77)
-    ,PX_INFO(6   , num_small_6,    54,   77)
-    ,PX_INFO(7   , num_small_7,    54,   77)
-    ,PX_INFO(8   , num_small_8,    54,   77)
-    ,PX_INFO(9   , num_small_9,    50,   77)
-  //        +====+============+======+=====+
+  //         +====+============+======+=====+
+  //         |NUM |   Data     | X-Px | Y-x |
+  //         +----+------------+------+-----+
+     IMG_INFO(0   , num_small_0,    54,   77)
+    ,IMG_INFO(1   , num_small_1,    34,   77)
+    ,IMG_INFO(2   , num_small_2,    54,   77)
+    ,IMG_INFO(3   , num_small_3,    54,   77)
+    ,IMG_INFO(4   , num_small_4,    54,   77)
+    ,IMG_INFO(5   , num_small_5,    54,   77)
+    ,IMG_INFO(6   , num_small_6,    54,   77)
+    ,IMG_INFO(7   , num_small_7,    54,   77)
+    ,IMG_INFO(8   , num_small_8,    54,   77)
+    ,IMG_INFO(9   , num_small_9,    50,   77)
+  //         +====+============+======+=====+
 };
 
 static bsp_lcd_t ITEMS_TABLE[LCD_ITEM_CNT] = 
