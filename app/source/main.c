@@ -203,6 +203,8 @@ void sys_po_heart_rate_notify(uint8_t heart_rate)
 {
   ret_code_t err_code;
 
+  bsp_lcd_display_heartrate_number(heart_rate);
+
   err_code = ble_hrns_heart_rate_update(&m_hrns, heart_rate, BLE_CONN_HANDLE_ALL);
   if ((err_code != NRF_SUCCESS) &&
       (err_code != NRF_ERROR_INVALID_STATE) &&

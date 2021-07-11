@@ -74,39 +74,41 @@ bsp_lcd_t;
 /* Private variables -------------------------------------------------- */
 static gc9a01_t m_gc9a01;
 
-static bsp_lcd_img_t BIG_NUM_TABLE[10] = 
+static bsp_lcd_img_t BIG_NUM_TABLE[11] = 
 {
   //         +====+==========+======+======+
   //         |NUM |   Data   | X-Px | Y-Px |
   //         +----+----------+------+------+
-     IMG_INFO(0   , num_big_0,    54,    77)
-    ,IMG_INFO(1   , num_big_1,    34,    77)
-    ,IMG_INFO(2   , num_big_2,    54,    77)
-    ,IMG_INFO(3   , num_big_3,    54,    77)
-    ,IMG_INFO(4   , num_big_4,    54,    77)
-    ,IMG_INFO(5   , num_big_5,    54,    77)
-    ,IMG_INFO(6   , num_big_6,    54,    77)
-    ,IMG_INFO(7   , num_big_7,    54,    77)
-    ,IMG_INFO(8   , num_big_8,    54,    77)
-    ,IMG_INFO(9   , num_big_9,    50,    77)
+     IMG_INFO(0   , num_big_0,    30,    42)
+    ,IMG_INFO(1   , num_big_1,    30,    42)
+    ,IMG_INFO(2   , num_big_2,    30,    42)
+    ,IMG_INFO(3   , num_big_3,    30,    42)
+    ,IMG_INFO(4   , num_big_4,    30,    42)
+    ,IMG_INFO(5   , num_big_5,    30,    42)
+    ,IMG_INFO(6   , num_big_6,    30,    42)
+    ,IMG_INFO(7   , num_big_7,    30,    42)
+    ,IMG_INFO(8   , num_big_8,    30,    42)
+    ,IMG_INFO(9   , num_big_9,    30,    42)
+    ,IMG_INFO(10  , num_big_n,    30,    42)
   //         +====+==========+======+======+
 };
 
-static bsp_lcd_img_t SMALL_NUM_TABLE[10] = 
+static bsp_lcd_img_t SMALL_NUM_TABLE[11] = 
 {
   //         +====+============+======+=====+
   //         |NUM |   Data     | X-Px | Y-x |
   //         +----+------------+------+-----+
-     IMG_INFO(0   , num_small_0,    54,   77)
-    ,IMG_INFO(1   , num_small_1,    34,   77)
-    ,IMG_INFO(2   , num_small_2,    54,   77)
-    ,IMG_INFO(3   , num_small_3,    54,   77)
-    ,IMG_INFO(4   , num_small_4,    54,   77)
-    ,IMG_INFO(5   , num_small_5,    54,   77)
-    ,IMG_INFO(6   , num_small_6,    54,   77)
-    ,IMG_INFO(7   , num_small_7,    54,   77)
-    ,IMG_INFO(8   , num_small_8,    54,   77)
-    ,IMG_INFO(9   , num_small_9,    50,   77)
+     IMG_INFO(0   , num_small_0,    15,   21)
+    ,IMG_INFO(1   , num_small_1,    15,   21)
+    ,IMG_INFO(2   , num_small_2,    15,   21)
+    ,IMG_INFO(3   , num_small_3,    15,   21)
+    ,IMG_INFO(4   , num_small_4,    15,   21)
+    ,IMG_INFO(5   , num_small_5,    15,   21)
+    ,IMG_INFO(6   , num_small_6,    15,   21)
+    ,IMG_INFO(7   , num_small_7,    15,   21)
+    ,IMG_INFO(8   , num_small_8,    15,   21)
+    ,IMG_INFO(9   , num_small_9,    15,   21)
+    ,IMG_INFO(10  , num_small_n,    15,   21)
   //         +====+============+======+=====+
 };
 
@@ -116,13 +118,15 @@ static bsp_lcd_t ITEMS_TABLE[LCD_ITEM_CNT] =
   //          |ITEMS               | X-Pos | Y-Pos |   Data   | X-Px | Y-Px |
   //          +--------------------+-------+-------+----------+------+------+
      ITEM_INFO(LCD_BACKGROUND      ,      0,      0,   spo2_bg,   240,   240)
-    ,ITEM_INFO(LCD_BATT_FULL       ,     90,    210, batt_full,    44,    27)
-    ,ITEM_INFO(LCD_BATT_75         ,     90,    210,   batt_75,    44,    27)
-    ,ITEM_INFO(LCD_BATT_50         ,     90,    210,   batt_50,    44,    27)
-    ,ITEM_INFO(LCD_BATT_25         ,     90,    210,   batt_25,    44,    27)
-    ,ITEM_INFO(LCD_BATT_0          ,     90,    210,    batt_0,    44,    27)
-    ,ITEM_INFO(LCD_SP02_NUM        ,     20,     60,      NULL,     0,     0)
-    ,ITEM_INFO(LCD_HEART_RATE_NUM  ,     80,    190,      NULL,     0,     0)
+    ,ITEM_INFO(LCD_BATT_FULL       ,    107,    215, batt_full,    24,    15)
+    ,ITEM_INFO(LCD_BATT_75         ,    107,    215,   batt_75,    24,    15)
+    ,ITEM_INFO(LCD_BATT_50         ,    107,    215,   batt_50,    24,    15)
+    ,ITEM_INFO(LCD_BATT_25         ,    107,    215,   batt_25,    24,    15)
+    ,ITEM_INFO(LCD_BATT_0          ,    107,    215,    batt_0,    24,    15)
+    ,ITEM_INFO(LCD_ARROW           ,    200,     85,    arrow,     15,    12)
+    ,ITEM_INFO(LCD_DOT             ,    200,     90,      dot,      9,     9)
+    ,ITEM_INFO(LCD_SP02_NUM        ,     45,     85,      NULL,     0,     0)
+    ,ITEM_INFO(LCD_HEART_RATE_NUM  ,     82,    185,      NULL,     0,     0)
   //          +====================+=======+=======+==========+======+======+
 };
 
@@ -148,7 +152,10 @@ void bsp_lcd_init(void)
   // Draw baterry image
   bsp_lcd_display_image(LCD_BATT_FULL);
 
-  bsp_lcd_display_spo2_number(98);
+  bsp_lcd_display_image(LCD_DOT);
+
+  bsp_lcd_display_spo2_number(100);
+  bsp_lcd_display_heartrate_number(74);
 }
 
 void bsp_lcd_display_image(bsp_lcd_item_t item)
@@ -163,35 +170,49 @@ void bsp_lcd_draw_number(bsp_lcd_item_t item, uint8_t num)
 {
   uint8_t units, dozens, hundreds;
   uint16_t x_current_position, y_current_position, x_px, y_px;
+  bsp_lcd_img_t *TABLE;
 
   hundreds = (num / 100);
   dozens   = (num % 100) / 10;
   units    = (num % 100) % 10;
+
+  if (item == LCD_SP02_NUM)
+    TABLE = BIG_NUM_TABLE;
+  else
+    TABLE = SMALL_NUM_TABLE;
 
   // Get position at first item
   x_current_position = ITEMS_TABLE[item].x_pos;
   y_current_position = ITEMS_TABLE[item].y_pos;
 
   // Pixcel equal position of first item plus pixcel of item
-  x_px = x_current_position + BIG_NUM_TABLE[hundreds].x_px;
-  y_px = y_current_position + BIG_NUM_TABLE[hundreds].y_px;
+  x_px = x_current_position + TABLE[hundreds].x_px;
+  y_px = y_current_position + TABLE[hundreds].y_px;
 
-  bsp_lcd_draw_image(x_current_position, y_current_position,
-                     x_px, y_px, BIG_NUM_TABLE[hundreds].data);
+  if (hundreds == 0)
+  {
+    bsp_lcd_draw_image(x_current_position, y_current_position,
+                       x_px, y_px, TABLE[10].data);
+  }
+  else
+  {
+    bsp_lcd_draw_image(x_current_position, y_current_position,
+                       x_px, y_px, TABLE[hundreds].data);
+  }
 
   // Get current position and pixcel
   x_current_position = x_px;
-  x_px = x_current_position + BIG_NUM_TABLE[dozens].x_px;
+  x_px = x_current_position + TABLE[dozens].x_px;
 
   bsp_lcd_draw_image(x_current_position, y_current_position,
-                     x_px, y_px, BIG_NUM_TABLE[dozens].data);
+                     x_px, y_px, TABLE[dozens].data);
 
   // Get current position and pixcel
   x_current_position = x_px;
-  x_px = x_current_position + BIG_NUM_TABLE[units].x_px;
+  x_px = x_current_position + TABLE[units].x_px;
 
   bsp_lcd_draw_image(x_current_position, y_current_position,
-                     x_px, y_px, BIG_NUM_TABLE[units].data);
+                     x_px, y_px, TABLE[units].data);
 }
 
 void bsp_lcd_fill(uint16_t color)
