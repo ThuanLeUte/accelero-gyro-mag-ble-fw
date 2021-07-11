@@ -70,58 +70,60 @@ bsp_lcd_t;
 #define PX_INFO(item, _data, _x_px, _y_px)[item] = { .data = _data, .x_px = _x_px, .y_px = _y_px }
 #define ITEM_INFO(item, _x_pos, _y_pos, _data, _x_px, _y_px)[item] = { .x_pos = _x_pos, .y_pos = _y_pos, .img.data = _data, .img.x_px = _x_px, .img.y_px = _y_px }
 
-#define BIG_NUM(x) (big_number_##x)
-
 /* Public variables --------------------------------------------------- */
 /* Private variables -------------------------------------------------- */
 static gc9a01_t m_gc9a01;
 
 static bsp_lcd_img_t BIG_NUM_TABLE[10] = 
 {
-  //        +=========+==========+==========+
-  //        |NUMBER   | X-Pixcel | Y-Pixcel |
-  //        +---------+----------+----------+
-     PX_INFO( 0      , image_data_0  ,  54     ,     77)
-    ,PX_INFO( 1      , image_data_1  ,  34     ,     77)
-    ,PX_INFO( 2      , image_data_2  ,  54     ,     77)
-    ,PX_INFO( 3      , image_data_3  ,  54     ,     77)
-    ,PX_INFO( 4      , image_data_4  ,  54     ,     77)
-    ,PX_INFO( 5      , image_data_5  ,  54     ,     77)
-    ,PX_INFO( 6      , image_data_6  ,  54     ,     77)
-    ,PX_INFO( 7      , image_data_7  ,  54     ,     77)
-    ,PX_INFO( 8      , image_data_8  ,  54     ,     77)
-    ,PX_INFO( 9      , image_data_9  ,  50     ,     77)
-  //        +==========+=========+==========+
+  //        +====+==========+======+======+
+  //        |NUM |   Data   | X-Px | Y-Px |
+  //        +----+----------+------+------+
+     PX_INFO(0   , num_big_0,    54,    77)
+    ,PX_INFO(1   , num_big_1,    34,    77)
+    ,PX_INFO(2   , num_big_2,    54,    77)
+    ,PX_INFO(3   , num_big_3,    54,    77)
+    ,PX_INFO(4   , num_big_4,    54,    77)
+    ,PX_INFO(5   , num_big_5,    54,    77)
+    ,PX_INFO(6   , num_big_6,    54,    77)
+    ,PX_INFO(7   , num_big_7,    54,    77)
+    ,PX_INFO(8   , num_big_8,    54,    77)
+    ,PX_INFO(9   , num_big_9,    50,    77)
+  //        +====+==========+======+======+
 };
 
 static bsp_lcd_img_t SMALL_NUM_TABLE[10] = 
 {
-  //        +=========+==========+==========+
-  //        |NUMBER   | X-Pixcel | Y-Pixcel |
-  //        +---------+----------+----------+
-     PX_INFO( 0       ,  misc_battery_full, 20  , 40)
-    ,PX_INFO( 1       ,  misc_battery_full, 20  , 40)
-    ,PX_INFO( 2       ,  misc_battery_full, 20  , 40)
-    ,PX_INFO( 3       ,  misc_battery_full, 20  , 40)
-    ,PX_INFO( 4       ,  misc_battery_full, 20  , 40)
-    ,PX_INFO( 5       ,  misc_battery_full, 20  , 40)
-    ,PX_INFO( 6       ,  misc_battery_full, 20  , 40)
-    ,PX_INFO( 7       ,  misc_battery_full, 20  , 40)
-    ,PX_INFO( 8       ,  misc_battery_full, 20  , 40)
-    ,PX_INFO( 9       ,  misc_battery_full, 20  , 40)
-  //        +==========+=========+==========+
+  //        +====+============+======+=====+
+  //        |NUM |   Data     | X-Px | Y-x |
+  //        +----+------------+------+-----+
+     PX_INFO(0   , num_small_0,    54,   77)
+    ,PX_INFO(1   , num_small_1,    34,   77)
+    ,PX_INFO(2   , num_small_2,    54,   77)
+    ,PX_INFO(3   , num_small_3,    54,   77)
+    ,PX_INFO(4   , num_small_4,    54,   77)
+    ,PX_INFO(5   , num_small_5,    54,   77)
+    ,PX_INFO(6   , num_small_6,    54,   77)
+    ,PX_INFO(7   , num_small_7,    54,   77)
+    ,PX_INFO(8   , num_small_8,    54,   77)
+    ,PX_INFO(9   , num_small_9,    50,   77)
+  //        +====+============+======+=====+
 };
 
 static bsp_lcd_t ITEMS_TABLE[LCD_ITEM_CNT] = 
 {
-  //        +=====================+==========+====================================+
-  //        |ITEMS                | X-Position | X-Position | X-Pixcel | X-Pixcel |
-  //        +---------------------+----------+------------------------------------+
-     ITEM_INFO( LCD_BACKGROUND      ,  0       ,     0,    spo2_background,    LCD_WIDTH, LCD_WIDTH)
-    ,ITEM_INFO( LCD_BATTERY         ,  90      ,  210,     misc_battery_full,    44     ,        27)
-    ,ITEM_INFO( LCD_SP02_NUM        ,  20      ,    40,     NULL             ,    0      ,        0)
-    ,ITEM_INFO( LCD_HEART_RATE_NUM  ,  20      ,    40,     NULL             ,    0      ,        0)
-  //        +=====================+==========+====================================+
+  //          +====================+=======+=======+==========+======+======+
+  //          |ITEMS               | X-Pos | Y-Pos |   Data   | X-Px | Y-Px |
+  //          +--------------------+-------+-------+----------+------+------+
+     ITEM_INFO(LCD_BACKGROUND      ,      0,      0,   spo2_bg,   240,   240)
+    ,ITEM_INFO(LCD_BATT_FULL       ,     90,    210, batt_full,    44,    27)
+    ,ITEM_INFO(LCD_BATT_75         ,     90,    210,   batt_75,    44,    27)
+    ,ITEM_INFO(LCD_BATT_50         ,     90,    210,   batt_50,    44,    27)
+    ,ITEM_INFO(LCD_BATT_25         ,     90,    210,   batt_25,    44,    27)
+    ,ITEM_INFO(LCD_BATT_0          ,     90,    210,    batt_0,    44,    27)
+    ,ITEM_INFO(LCD_SP02_NUM        ,     20,     60,      NULL,     0,     0)
+    ,ITEM_INFO(LCD_HEART_RATE_NUM  ,     80,    190,      NULL,     0,     0)
+  //          +====================+=======+=======+==========+======+======+
 };
 
 /* Private function prototypes ---------------------------------------- */
@@ -144,7 +146,7 @@ void bsp_lcd_init(void)
   bsp_lcd_display_image(LCD_BACKGROUND);
 
   // Draw baterry image
-  bsp_lcd_display_image(LCD_BATTERY);
+  bsp_lcd_display_image(LCD_BATT_FULL);
 
   bsp_lcd_display_spo2_number(98);
 }

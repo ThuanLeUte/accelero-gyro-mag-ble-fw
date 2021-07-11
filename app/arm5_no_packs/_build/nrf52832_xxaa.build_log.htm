@@ -29,13 +29,15 @@ Project File Date:  07/03/2021
 Build target 'nrf52832_xxaa'
 Note: source file '..\..\components\libraries\bsp\bsp.c' - object file renamed from '.\_build\bsp.o' to '.\_build\bsp_1.o'.
 compiling bsp_lcd.c...
-..\source\bsp_lcd.c(87): warning:  #177-D: variable "SMALL_NUM_TABLE"  was declared but never referenced
-  static bsp_px_t SMALL_NUM_TABLE[10] = 
-..\source\bsp_lcd.c: 1 warning, 0 errors
+..\source\bsp_lcd.c(95): warning:  #177-D: variable "SMALL_NUM_TABLE"  was declared but never referenced
+  static bsp_lcd_img_t SMALL_NUM_TABLE[10] = 
+..\source\bsp_lcd.c(344): warning:  #177-D: function "bsp_lcd_fill_square"  was declared but never referenced
+  static void bsp_lcd_fill_square(uint16_t x0, uint16_t y0, uint16_t x1,
+..\source\bsp_lcd.c: 2 warnings, 0 errors
 linking...
-Program Size: Code=40952 RO-data=4456 RW-data=624 ZI-data=18088  
+Program Size: Code=41272 RO-data=4488 RW-data=800 ZI-data=18088  
 FromELF: creating hex file...
-".\_build\nrf52832_xxaa.axf" - 0 Error(s), 1 Warning(s).
+".\_build\nrf52832_xxaa.axf" - 0 Error(s), 2 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -61,10 +63,10 @@ Package Vendor: NordicSemiconductor
    * Component: ARM::CMSIS:CORE:5.3.0
 
    * Component: NordicSemiconductor::Device:Startup:8.35.0
-      Source file:   Device\Source\arm\arm_startup_nrf52.s
-      Source file:   Device\Source\system_nrf52.c
-      Include file:  Device\Include\system_nrf52.h
       Include file:  Device\Include\system_nrf.h
+      Include file:  Device\Include\system_nrf52.h
+      Source file:   Device\Source\system_nrf52.c
+      Source file:   Device\Source\arm\arm_startup_nrf52.s
 Build Time Elapsed:  00:00:05
 </pre>
 </body>
