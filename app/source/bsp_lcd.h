@@ -33,6 +33,7 @@ typedef enum
   LCD_BATT_0,
   LCD_ARROW,
   LCD_DOT,
+  LCD_DOT_N,
   LCD_SP02_NUM,
   LCD_HEART_RATE_NUM,
   LCD_ITEM_CNT

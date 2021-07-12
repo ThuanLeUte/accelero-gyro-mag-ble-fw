@@ -19,11 +19,13 @@
 #include "small_number.h"
 #include "miscellaneous.h"
 #include "background.h"
+#include <math.h>
 
 /* Private defines ---------------------------------------------------- */
 #define pgm_read_byte(addr) (*(const unsigned char *)(addr))
 #define pgm_read_word(addr) (*(const uint16_t *)(addr))
 
+#define PI                   (3.14159265)
 #define LCD_WIDTH            (240)
 #define LCD_HEIGHT           (240)
 
@@ -123,8 +125,9 @@ static bsp_lcd_t ITEMS_TABLE[LCD_ITEM_CNT] =
     ,ITEM_INFO(LCD_BATT_50         ,    107,    215,   batt_50,    24,    15)
     ,ITEM_INFO(LCD_BATT_25         ,    107,    215,   batt_25,    24,    15)
     ,ITEM_INFO(LCD_BATT_0          ,    107,    215,    batt_0,    24,    15)
-    ,ITEM_INFO(LCD_ARROW           ,    200,     85,    arrow,     15,    12)
-    ,ITEM_INFO(LCD_DOT             ,    200,     90,      dot,      9,     9)
+    ,ITEM_INFO(LCD_ARROW           ,    200,     85,     arrow,    15,    12)
+    ,ITEM_INFO(LCD_DOT             ,    190,    180,       dot,     9,     9)
+    ,ITEM_INFO(LCD_DOT_N           ,    190,    180,     dot_n,     9,     9)
     ,ITEM_INFO(LCD_SP02_NUM        ,     45,     85,      NULL,     0,     0)
     ,ITEM_INFO(LCD_HEART_RATE_NUM  ,     82,    185,      NULL,     0,     0)
   //          +====================+=======+=======+==========+======+======+
@@ -134,6 +137,7 @@ static bsp_lcd_t ITEMS_TABLE[LCD_ITEM_CNT] =
 static void bsp_lcd_write_pixel(uint16_t x, uint16_t y, uint16_t thin, uint16_t color);
 static void bsp_lcd_address_set(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
 static void bsp_lcd_fill_square(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint16_t color);
+void bsp_lcd_display_point_spo2(uint8_t spo2);
 
 /* Function definitions ----------------------------------------------- */
 void bsp_lcd_init(void)
@@ -146,16 +150,20 @@ void bsp_lcd_init(void)
 
   bsp_lcd_fill(LCD_WHITE);
 
-  // Draw background image
+  // Draw background image+
   bsp_lcd_display_image(LCD_BACKGROUND);
 
   // Draw baterry image
   bsp_lcd_display_image(LCD_BATT_FULL);
 
-  bsp_lcd_display_image(LCD_DOT);
-
   bsp_lcd_display_spo2_number(100);
   bsp_lcd_display_heartrate_number(74);
+
+  for (int i = 0; i < 101; i++)
+  {
+    bsp_lcd_display_spo2_number(i);
+    nrf_delay_ms(100);
+  }
 }
 
 void bsp_lcd_display_image(bsp_lcd_item_t item)
@@ -164,6 +172,47 @@ void bsp_lcd_display_image(bsp_lcd_item_t item)
                      ITEMS_TABLE[item].img.x_px + ITEMS_TABLE[item].x_pos,
                      ITEMS_TABLE[item].img.y_px + ITEMS_TABLE[item].y_pos,
                      ITEMS_TABLE[item].img.data);
+}
+
+void bsp_lcd_display_point_spo2(uint8_t spo2)
+{
+  static uint16_t x_pos, y_pos;
+  double degree;
+  double val;
+
+  // 0  - 88
+  // 88 - 94
+  // 94 - 100
+
+  bsp_lcd_draw_image(x_pos, y_pos,
+                     ITEMS_TABLE[LCD_DOT_N].img.x_px + x_pos,
+                     ITEMS_TABLE[LCD_DOT_N].img.y_px + y_pos,
+                     ITEMS_TABLE[LCD_DOT_N].img.data);
+
+  if (spo2 <= 88)
+  {
+    degree = 220.0 - (double)(spo2 * 0.59);
+  }
+  else if (spo2 > 88 && spo2 <= 94)
+  {
+    spo2 = spo2 - 88;
+    degree = 168 - (double)(spo2 * 18.6);
+  } 
+  else
+  {
+    spo2 = spo2 - 94;
+    degree = 56 - (double)(spo2 * 16);
+  }
+  
+  val = PI / 180.0;
+
+  x_pos = 116 +  103 * cos(degree * val);
+  y_pos = abs((int)(-116 + 103 * sin(degree * val)));
+
+  bsp_lcd_draw_image(x_pos, y_pos,
+                     ITEMS_TABLE[LCD_DOT].img.x_px + x_pos,
+                     ITEMS_TABLE[LCD_DOT].img.y_px + y_pos,
+                     ITEMS_TABLE[LCD_DOT].img.data);
 }
 
 void bsp_lcd_draw_number(bsp_lcd_item_t item, uint8_t num)
@@ -177,7 +226,10 @@ void bsp_lcd_draw_number(bsp_lcd_item_t item, uint8_t num)
   units    = (num % 100) % 10;
 
   if (item == LCD_SP02_NUM)
+  {
     TABLE = BIG_NUM_TABLE;
+    bsp_lcd_display_point_spo2(num);
+  }
   else
     TABLE = SMALL_NUM_TABLE;
 
