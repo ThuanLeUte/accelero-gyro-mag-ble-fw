@@ -41,7 +41,6 @@
 #define MIS2DH_VALUE_1620HZ_ODR         (0B10000000)
 #define MIS2DH_VALUE_5376HZ_ODR         (0B10010000)
 
-
 // DEFINES MIS2DH REGISTERS
 #define MIS2DH_REG_STATUS_REG_AUX       (0X07)
 #define MIS2DH_REG_OUT_TEMP_L           (0X0C)
@@ -85,13 +84,10 @@
 // DEFINES MIS2DH IDENTIFIER VALUE
 #define MIS2DH_VALUE_IDENTIFIER         (0X33)
 
-
 // DEFINES MIS2DH AXIS ENABLE OPTION
 #define MIS2DH_X_AXIS_ENABLE            (0B00000001)
 #define MIS2DH_Y_AXIS_ENABLE            (0B00000010)
 #define MIS2DH_Z_AXIS_ENABLE            (0B00000100)
-
-
 
 /* Private enumerate/structure ---------------------------------------- */
 /* Private macros ----------------------------------------------------- */
@@ -112,7 +108,6 @@ static base_status_t m_mis2dh_read_reg(mis2dh_t *me, uint8_t reg, uint8_t *p_dat
 static base_status_t m_mis2dh_write_reg(mis2dh_t *me, uint8_t reg, uint8_t *p_data, uint32_t len);
 
 /* Function definitions ----------------------------------------------- */
-
 /* Private function definitions ---------------------------------------- */
 /**
  * @brief         MIS2DH init
@@ -140,14 +135,12 @@ base_status_t m_mis2dh_init(mis2dh_t *me)
   return BS_OK;
 }
 
-
-
 /* Private function definitions ---------------------------------------- */
 /**
  * @brief         MIS2DH set resolution
  *
- * @param[in]     me      Pointer to handle of MIS2DH module.
- * @param[in]     _m      Mode
+ * @param[in]     me            Pointer to handle of MIS2DH module.
+ * @param[in]     resolution    Resolution
 
  *
  * @attention     None
@@ -157,58 +150,54 @@ base_status_t m_mis2dh_init(mis2dh_t *me)
  * - BS_ERROR
  */
 
-base_status_t m_mis2dh_set_resolution(mis2dh_t *me, uint8_t _res)
+base_status_t m_mis2dh_set_resolution(mis2dh_t *me, uint8_t resolution)
 {
-  uint8_t _tmp;
-    switch (_res)
-	  {
+  uint8_t tmp;
 
-      case MIS2DH_VALUE_8_BIT_RES:
-        CHECK_STATUS(m_mis2dh_read_reg(me, MIS2DH_REG_CTRL_REG1, &_tmp, 1));
-        _tmp |= (1 << 3);
-        CHECK_STATUS(m_mis2dh_write_reg(me, MIS2DH_REG_CTRL_REG1, &_tmp, 1));
+  switch (resolution)
+  {
+    case MIS2DH_VALUE_8_BIT_RES:
+      CHECK_STATUS(m_mis2dh_read_reg(me, MIS2DH_REG_CTRL_REG1, &tmp, 1));
+      tmp |= (1 << 3);
+      CHECK_STATUS(m_mis2dh_write_reg(me, MIS2DH_REG_CTRL_REG1, &tmp, 1));
 
-        CHECK_STATUS(m_mis2dh_read_reg(me, MIS2DH_REG_CTRL_REG4, &_tmp, 1));
-        _tmp &= ~(1 << 3);
-        CHECK_STATUS(m_mis2dh_write_reg(me, MIS2DH_REG_CTRL_REG4, &_tmp, 1));
-		    break;
+      CHECK_STATUS(m_mis2dh_read_reg(me, MIS2DH_REG_CTRL_REG4, &tmp, 1));
+      tmp &= ~(1 << 3);
+      CHECK_STATUS(m_mis2dh_write_reg(me, MIS2DH_REG_CTRL_REG4, &tmp, 1));
+      break;
 
-      case MIS2DH_VALUE_10_BIT_RES:
-        CHECK_STATUS(m_mis2dh_read_reg(me, MIS2DH_REG_CTRL_REG1, &_tmp, 1));
-        _tmp &= ~(1 << 3);
-        CHECK_STATUS(m_mis2dh_write_reg(me, MIS2DH_REG_CTRL_REG1, &_tmp, 1));
+    case MIS2DH_VALUE_10_BIT_RES:
+      CHECK_STATUS(m_mis2dh_read_reg(me, MIS2DH_REG_CTRL_REG1, &tmp, 1));
+      tmp &= ~(1 << 3);
+      CHECK_STATUS(m_mis2dh_write_reg(me, MIS2DH_REG_CTRL_REG1, &tmp, 1));
 
-        CHECK_STATUS(m_mis2dh_read_reg(me, MIS2DH_REG_CTRL_REG4, &_tmp, 1));
-        _tmp &= ~(1 << 3);
-        CHECK_STATUS(m_mis2dh_write_reg(me, MIS2DH_REG_CTRL_REG4, &_tmp, 1));
-		    break;
+      CHECK_STATUS(m_mis2dh_read_reg(me, MIS2DH_REG_CTRL_REG4, &tmp, 1));
+      tmp &= ~(1 << 3);
+      CHECK_STATUS(m_mis2dh_write_reg(me, MIS2DH_REG_CTRL_REG4, &tmp, 1));
+      break;
 
-      case MIS2DH_VALUE_12_BIT_RES:
-        CHECK_STATUS(m_mis2dh_read_reg(me, MIS2DH_REG_CTRL_REG1, &_tmp, 1));
-        _tmp |= (1 << 3);
-        CHECK_STATUS(m_mis2dh_write_reg(me, MIS2DH_REG_CTRL_REG1, &_tmp, 1));
+    case MIS2DH_VALUE_12_BIT_RES:
+      CHECK_STATUS(m_mis2dh_read_reg(me, MIS2DH_REG_CTRL_REG1, &tmp, 1));
+      tmp |= (1 << 3);
+      CHECK_STATUS(m_mis2dh_write_reg(me, MIS2DH_REG_CTRL_REG1, &tmp, 1));
 
-        CHECK_STATUS(m_mis2dh_read_reg(me, MIS2DH_REG_CTRL_REG4, &_tmp, 1));
-        _tmp |= (1 << 3);
-        CHECK_STATUS(m_mis2dh_write_reg(me, MIS2DH_REG_CTRL_REG4, &_tmp, 1));
-		    break;
+      CHECK_STATUS(m_mis2dh_read_reg(me, MIS2DH_REG_CTRL_REG4, &tmp, 1));
+      tmp |= (1 << 3);
+      CHECK_STATUS(m_mis2dh_write_reg(me, MIS2DH_REG_CTRL_REG4, &tmp, 1));
+      break;
 
-      default:
-		    break;
+    default:
+      break;
+  }
 
-    }
-
-    return BS_OK;
+  return BS_OK;
 }
-
-
-
 
 /**
  * @brief         MIS2DH set scale
  *
- * @param[in]     me      Pointer to handle of MIS2DH module.
- * @param[in]     _sc     Scale
+ * @param[in]     me        Pointer to handle of MIS2DH module.
+ * @param[in]     scale     Scale
 
  *
  * @attention     None
@@ -217,26 +206,23 @@ base_status_t m_mis2dh_set_resolution(mis2dh_t *me, uint8_t _res)
  * - BS_OK
  * - BS_ERROR
  */
-base_status_t m_mis2dh_set_scale(mis2dh_t *me, uint8_t _sc)
+base_status_t m_mis2dh_set_scale(mis2dh_t *me, uint8_t scale)
 {
-  uint8_t _tmp;
+  uint8_t tmp;
 
-    CHECK_STATUS(m_mis2dh_read_reg(me, MIS2DH_REG_CTRL_REG4, &_tmp, 1));
-    _tmp &= (0B11001111);
-    _tmp |= _sc;
-    CHECK_STATUS(m_mis2dh_write_reg(me, MIS2DH_REG_CTRL_REG4, &_tmp, 1));
+  CHECK_STATUS(m_mis2dh_read_reg(me, MIS2DH_REG_CTRL_REG4, &tmp, 1));
+  tmp &= (0B11001111);
+  tmp |= scale;
+  CHECK_STATUS(m_mis2dh_write_reg(me, MIS2DH_REG_CTRL_REG4, &tmp, 1));
 
-    return BS_OK;
+  return BS_OK;
 }
-
-
-
 
 /**
  * @brief         MIS2DH set refresh rate
  *
  * @param[in]     me      Pointer to handle of MIS2DH module.
- * @param[in]     _ref      Scale
+ * @param[in]     ref      Scale
 
  *
  * @attention     None
@@ -245,20 +231,17 @@ base_status_t m_mis2dh_set_scale(mis2dh_t *me, uint8_t _sc)
  * - BS_OK
  * - BS_ERROR
  */
-base_status_t m_mis2dh_set_refresh_rate(mis2dh_t *me, uint8_t _ref)
+base_status_t m_mis2dh_setrefresh_rate(mis2dh_t *me, uint8_t ref)
 {
-  uint8_t _tmp;
+  uint8_t tmp;
 
-    CHECK_STATUS(m_mis2dh_read_reg(me, MIS2DH_REG_CTRL_REG1, &_tmp, 1));
-    _tmp &= (0B00001111);
-    _tmp |= _ref;
-    CHECK_STATUS(m_mis2dh_write_reg(me, MIS2DH_REG_CTRL_REG1, &_tmp, 1));
+  CHECK_STATUS(m_mis2dh_read_reg(me, MIS2DH_REG_CTRL_REG1, &tmp, 1));
+  tmp &= (0B00001111);
+  tmp |= ref;
+  CHECK_STATUS(m_mis2dh_write_reg(me, MIS2DH_REG_CTRL_REG1, &tmp, 1));
 
-    return BS_OK;
+  return BS_OK;
 }
-
-
-
 
 /**
  * @brief         MIS2DH get accel raw data
@@ -274,79 +257,67 @@ base_status_t m_mis2dh_set_refresh_rate(mis2dh_t *me, uint8_t _ref)
 base_status_t m_mis2dh_get_raw_data(mis2dh_t *me)
 {
 
-  uint8_t _status;
-  uint8_t _data[6];
+  uint8_t status;
+  uint8_t data[6];
 
-  CHECK_STATUS(m_mis2dh_read_reg(me, MIS2DH_REG_STATUS_REG, &_status, 1));
-  _status &= (0B00001000);
-  _status >>= 3;
+  CHECK_STATUS(m_mis2dh_read_reg(me, MIS2DH_REG_STATUS_REG, &status, 1));
+  status &= (0B00001000);
+  status >>= 3;
 
-  if (_status)
+  if (status)
   {
-
-    CHECK_STATUS(m_mis2dh_read_reg(me, MIS2DH_REG_OUT_X_L, _data, 6));
-    me->rawdata_def.x = ((_data[1] << 8) + _data[0]);
-    me->rawdata_def.y = ((_data[3] << 8) + _data[2]);
-    me->rawdata_def.z = ((_data[5] << 8) + _data[4]);
-
+    CHECK_STATUS(m_mis2dh_read_reg(me, MIS2DH_REG_OUT_X_L, data, 6));
+    me->rawdata.x = ((data[1] << 8) + data[0]);
+    me->rawdata.y = ((data[3] << 8) + data[2]);
+    me->rawdata.z = ((data[5] << 8) + data[4]);
   }
   
   return BS_OK;
 }
 
-
-
-
 /**
  * @brief         MIS2DH enable axis
  *
  * @param[in]     me      Pointer to handle of MIS2DH module.
- * @param[in]     _axis   Axis
+ * @param[in]     axis   Axis
  * @attention     None
  *
  * @return
  * - BS_OK
  * - BS_ERROR
  */
-base_status_t m_mis2dh_enable_axis(mis2dh_t *me, uint8_t _axis)
+base_status_t m_mis2dh_enable_axis(mis2dh_t *me, uint8_t axis)
 {
-  uint8_t _tmp;
+  uint8_t tmp;
 
-  CHECK_STATUS(m_mis2dh_read_reg(me, MIS2DH_REG_CTRL_REG1, &_tmp, 1));
-
-  _tmp |= _axis;
-
-  CHECK_STATUS(m_mis2dh_write_reg(me, MIS2DH_REG_CTRL_REG1, &_tmp, 1));
+  CHECK_STATUS(m_mis2dh_read_reg(me, MIS2DH_REG_CTRL_REG1, &tmp, 1));
+  tmp |= axis;
+  CHECK_STATUS(m_mis2dh_write_reg(me, MIS2DH_REG_CTRL_REG1, &tmp, 1));
 
   return BS_OK;
 }
-
-
 
 /**
  * @brief         MIS2DH disble axis
  *
  * @param[in]     me      Pointer to handle of MIS2DH module.
- * @param[in]     _axis   Axis
+ * @param[in]     axis   Axis
  * @attention     None
  *
  * @return
  * - BS_OK
  * - BS_ERROR
  */
-base_status_t m_mis2dh_disable_axis(mis2dh_t *me, uint8_t _axis)
+base_status_t m_mis2dh_disable_axis(mis2dh_t *me, uint8_t axis)
 {
-  uint8_t _tmp;
+  uint8_t tmp;
 
-  CHECK_STATUS(m_mis2dh_read_reg(me, MIS2DH_REG_CTRL_REG1, &_tmp, 1));
-
-  _tmp &= ~(_axis);
-
-  CHECK_STATUS(m_mis2dh_write_reg(me, MIS2DH_REG_CTRL_REG1, &_tmp, 1));
+  CHECK_STATUS(m_mis2dh_read_reg(me, MIS2DH_REG_CTRL_REG1, &tmp, 1));
+  tmp &= ~(axis);
+  CHECK_STATUS(m_mis2dh_write_reg(me, MIS2DH_REG_CTRL_REG1, &tmp, 1));
 
   return BS_OK;
 }
-
 
 /**
  * @brief         MIS2DH reboot memory
@@ -360,17 +331,12 @@ base_status_t m_mis2dh_disable_axis(mis2dh_t *me, uint8_t _axis)
  */
 base_status_t m_mis2dh_reboot_memory(mis2dh_t *me)
 {
-  uint8_t _tmp;
+  uint8_t tmp = (0B10000000);
 
-  _tmp = (0B10000000);
-
-  CHECK_STATUS(m_mis2dh_write_reg(me, MIS2DH_REG_CTRL_REG5, &_tmp, 1));
+  CHECK_STATUS(m_mis2dh_write_reg(me, MIS2DH_REG_CTRL_REG5, &tmp, 1));
 
   return BS_OK;
 }
-
-
-
 
 /**
  * @brief         MIS2DH enter normal mode
@@ -384,15 +350,12 @@ base_status_t m_mis2dh_reboot_memory(mis2dh_t *me)
  */
 base_status_t m_mis2dh_enter_normal_mode(mis2dh_t *me)
 {
-  uint8_t _tmp;
+  uint8_t tmp = (0B00000000);
 
-  _tmp = (0B00000000);
-
-  CHECK_STATUS(m_mis2dh_write_reg(me, MIS2DH_REG_CTRL_REG5, &_tmp, 1));
+  CHECK_STATUS(m_mis2dh_write_reg(me, MIS2DH_REG_CTRL_REG5, &tmp, 1));
 
   return BS_OK;
 }
-
 
 /**
  * @brief         MIS2DH read register
@@ -414,9 +377,6 @@ static base_status_t m_mis2dh_read_reg(mis2dh_t *me, uint8_t reg, uint8_t *p_dat
 
   return BS_OK;
 }
-
-
-
 
 /**
  * @brief         MIS2DH read register

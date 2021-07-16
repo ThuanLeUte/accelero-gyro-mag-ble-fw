@@ -38,8 +38,7 @@ typedef struct
     float y;
     float z;
   }
-  rawdata_def;
-
+  rawdata;
 
   // Read n-bytes from device's internal address <reg_addr> via I2C bus
   base_status_t (*i2c_read) (uint8_t slave_addr, uint8_t reg_addr, uint8_t *data, uint32_t len);
@@ -48,22 +47,6 @@ typedef struct
   base_status_t (*i2c_write) (uint8_t slave_addr, uint8_t reg_addr, uint8_t *data, uint32_t len);
 }
 mis2dh_t;
-
-/* Public macros ------------------------------------------------------ */
-/* Public variables --------------------------------------------------- */
-/* Public function prototypes ----------------------------------------- */
-/**
- * @brief         Initialize MIS2DH
- *
- * @param[in]     me            Pointer to handle of MIS2DH module.
- *
- * @attention     None
- *
- * @return
- * - BS_OK
- * - BS_ERROR
- */
-base_status_t mis2dh_init(mis2dh_t *me);
 
 /* -------------------------------------------------------------------------- */
 #ifdef __cplusplus
