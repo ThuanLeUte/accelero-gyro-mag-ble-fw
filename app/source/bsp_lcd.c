@@ -55,9 +55,9 @@
 /* Private enumerate/structure ---------------------------------------- */
 typedef struct
 {
-  const unsigned short *data;
   uint8_t x_px;
   uint8_t y_px;
+  const unsigned short *data;
 }
 bsp_lcd_img_t;
 
@@ -71,7 +71,7 @@ bsp_lcd_t;
 
 /* Private macros ----------------------------------------------------- */
 #define IMG_INFO(item, _data, _x_px, _y_px)[item] = { .data = _data, .x_px = _x_px, .y_px = _y_px }
-#define ITEM_INFO(item, _x_pos, _y_pos, _data, _x_px, _y_px)[item] = { .x_pos = _x_pos, .y_pos = _y_pos, .img.data = _data, .img.x_px = _x_px, .img.y_px = _y_px }
+#define ITEM_INFO(item, _x_pos, _y_pos, _x_px, _y_px, _data)[item] = { .x_pos = _x_pos, .y_pos = _y_pos, .img.x_px = _x_px, .img.y_px = _y_px , .img.data = _data }
 
 /* Public variables --------------------------------------------------- */
 /* Private variables -------------------------------------------------- */
@@ -117,20 +117,20 @@ static bsp_lcd_img_t SMALL_NUM_TABLE[] =
 
 static bsp_lcd_t ITEMS_TABLE[] = 
 {
-  //          +====================+=======+=======+==========+======+======+
-  //          |ITEMS               | X-Pos | Y-Pos |   Data   | X-Px | Y-Px |
-  //          +--------------------+-------+-------+----------+------+------+
-     ITEM_INFO(LCD_BACKGROUND      ,      0,      0,   spo2_bg,   240,   240)
-    ,ITEM_INFO(LCD_BATT_FULL       ,    107,    215, batt_full,    24,    15)
-    ,ITEM_INFO(LCD_BATT_75         ,    107,    215,   batt_75,    24,    15)
-    ,ITEM_INFO(LCD_BATT_50         ,    107,    215,   batt_50,    24,    15)
-    ,ITEM_INFO(LCD_BATT_25         ,    107,    215,   batt_25,    24,    15)
-    ,ITEM_INFO(LCD_BATT_0          ,    107,    215,    batt_0,    24,    15)
-    ,ITEM_INFO(LCD_DOT             ,    190,    180,       dot,     9,     9)
-    ,ITEM_INFO(LCD_DOT_N           ,    190,    180,     dot_n,     9,     9)
-    ,ITEM_INFO(LCD_SP02_NUM        ,     45,     85,      NULL,     0,     0)
-    ,ITEM_INFO(LCD_HEART_RATE_NUM  ,     82,    185,      NULL,     0,     0)
-  //          +====================+=======+=======+==========+======+======+
+  //          +====================+=======+=======+======+======+==========+
+  //          |ITEMS               | X-Pos | Y-Pos | X-Px | Y-Px | Data     |
+  //          +--------------------+-------+-------+------+------+----------+
+     ITEM_INFO(LCD_BACKGROUND      ,      0,      0,   240,   240, spo2_bg  )
+    ,ITEM_INFO(LCD_BATT_FULL       ,    107,    215,    24,    15, batt_full)
+    ,ITEM_INFO(LCD_BATT_75         ,    107,    215,    24,    15, batt_75  )
+    ,ITEM_INFO(LCD_BATT_50         ,    107,    215,    24,    15, batt_50  )
+    ,ITEM_INFO(LCD_BATT_25         ,    107,    215,    24,    15, batt_25  )
+    ,ITEM_INFO(LCD_BATT_0          ,    107,    215,    24,    15, batt_0   )
+    ,ITEM_INFO(LCD_DOT             ,    190,    180,     9,     9, dot      )
+    ,ITEM_INFO(LCD_DOT_N           ,    190,    180,     9,     9, dot_n    )
+    ,ITEM_INFO(LCD_SP02_NUM        ,     45,     85,     0,     0, NULL     )
+    ,ITEM_INFO(LCD_HEART_RATE_NUM  ,     82,    185,     0,     0, NULL     )
+  //          +====================+=======+=======+======+======+==========+
 };
 
 /* Private function prototypes ---------------------------------------- */
