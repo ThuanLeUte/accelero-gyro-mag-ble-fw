@@ -1,10 +1,10 @@
 /**
  * @file       mis2dh.h
- * @copyright  Copyright (C) 2020 ThuanLe. All rights reserved.
- * @license    This project is released under the ThuanLe License.
+ * @copyright  Copyright (C) 2020 Hydratech. All rights reserved.
+ * @license    This project is released under the Hydratech License.
  * @version    1.0.0
  * @date       2021-03-22
- * @author     Thuan Le
+ * @author     Hiep Le
  * @brief      Driver support MIS2DH (Accelerometer)
  * @note       None
  * @example    None
@@ -49,7 +49,6 @@ typedef struct
 mis2dh_t;
 
 /* Public function prototypes ----------------------------------------- */
-/* Private function definitions ---------------------------------------- */
 /**
  * @brief         MIS2DH init
  *

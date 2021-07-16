@@ -1,10 +1,10 @@
 /**
  * @file       mis2dh.c
- * @copyright  Copyright (C) 2020 ThuanLe. All rights reserved.
- * @license    This project is released under the ThuanLe License.
+ * @copyright  Copyright (C) 2020 Hydratech. All rights reserved.
+ * @license    This project is released under the Hydratech License.
  * @version    1.0.0
  * @date       2021-03-22
- * @author     Thuan Le
+ * @author     Hiep Le
  * @brief      Driver support MIS2DH (Accelerometer)
  * @note       None
  * @example    None
@@ -14,9 +14,8 @@
 #include "mis2dh.h"
 
 /* Private defines ---------------------------------------------------- */
-// Registers
 // DEFINING GRAVITATIONAL ACCELERATION CONSTANT (IN EUROPE, CROATIA)
-#define MIS2DH_VALUE_GRAVITY            9.806
+#define MIS2DH_VALUE_GRAVITY            (9.806)
 
 // DEFINING RESOLUTION (SAME AS POWER MODE, LOW_POWER MEANS 8_BIT_RES, HI_RES MANS 12_BIT_RES)
 #define MIS2DH_VALUE_8_BIT_RES          (0X00)
@@ -107,9 +106,8 @@ base_status_t mis2dh_init(mis2dh_t *me)
 
   CHECK_STATUS(m_mis2dh_read_reg(me, MIS2DH_REG_WHO_AM_I, &identifier, 1));
 
-  if (MIS2DH_VALUE_IDENTIFIER != identifier)
-    return BS_ERROR;
-  
+  CHECK(MIS2DH_VALUE_IDENTIFIER == identifier, BS_ERROR);
+
   return BS_OK;
 }
 
@@ -196,7 +194,7 @@ base_status_t mis2dh_get_raw_data(mis2dh_t *me)
     me->rawdata.y = ((data[3] << 8) + data[2]);
     me->rawdata.z = ((data[5] << 8) + data[4]);
   }
-  
+
   return BS_OK;
 }
 
@@ -240,6 +238,7 @@ base_status_t mis2dh_enter_normal_mode(mis2dh_t *me)
   return BS_OK;
 }
 
+/* Private function definitions ---------------------------------------- */
 /**
  * @brief         MIS2DH read register
  *
