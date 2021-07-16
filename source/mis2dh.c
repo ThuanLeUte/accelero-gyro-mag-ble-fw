@@ -98,19 +98,7 @@ static base_status_t m_mis2dh_read_reg(mis2dh_t *me, uint8_t reg, uint8_t *p_dat
 static base_status_t m_mis2dh_write_reg(mis2dh_t *me, uint8_t reg, uint8_t *p_data, uint32_t len);
 
 /* Function definitions ----------------------------------------------- */
-/* Private function definitions ---------------------------------------- */
-/**
- * @brief         MIS2DH init
- *
- * @param[in]     me      Pointer to handle of MIS2DH module.
- *
- * @attention     None
- *
- * @return
- * - BS_OK
- * - BS_ERROR
- */
-base_status_t m_mis2dh_init(mis2dh_t *me)
+base_status_t mis2dh_init(mis2dh_t *me)
 {
   uint8_t identifier;
 
@@ -125,22 +113,7 @@ base_status_t m_mis2dh_init(mis2dh_t *me)
   return BS_OK;
 }
 
-/* Private function definitions ---------------------------------------- */
-/**
- * @brief         MIS2DH set resolution
- *
- * @param[in]     me            Pointer to handle of MIS2DH module.
- * @param[in]     resolution    Resolution
-
- *
- * @attention     None
- *
- * @return
- * - BS_OK
- * - BS_ERROR
- */
-
-base_status_t m_mis2dh_set_resolution(mis2dh_t *me, uint8_t resolution)
+base_status_t mis2dh_set_resolution(mis2dh_t *me, uint8_t resolution)
 {
   uint8_t tmp;
 
@@ -183,20 +156,7 @@ base_status_t m_mis2dh_set_resolution(mis2dh_t *me, uint8_t resolution)
   return BS_OK;
 }
 
-/**
- * @brief         MIS2DH set scale
- *
- * @param[in]     me        Pointer to handle of MIS2DH module.
- * @param[in]     scale     Scale
-
- *
- * @attention     None
- *
- * @return
- * - BS_OK
- * - BS_ERROR
- */
-base_status_t m_mis2dh_set_scale(mis2dh_t *me, uint8_t scale)
+base_status_t mis2dh_set_scale(mis2dh_t *me, uint8_t scale)
 {
   uint8_t tmp;
 
@@ -208,20 +168,7 @@ base_status_t m_mis2dh_set_scale(mis2dh_t *me, uint8_t scale)
   return BS_OK;
 }
 
-/**
- * @brief         MIS2DH set refresh rate
- *
- * @param[in]     me      Pointer to handle of MIS2DH module.
- * @param[in]     ref      Scale
-
- *
- * @attention     None
- *
- * @return
- * - BS_OK
- * - BS_ERROR
- */
-base_status_t m_mis2dh_setrefresh_rate(mis2dh_t *me, uint8_t ref)
+base_status_t mis2dh_set_refresh_rate(mis2dh_t *me, uint8_t ref)
 {
   uint8_t tmp;
 
@@ -233,20 +180,8 @@ base_status_t m_mis2dh_setrefresh_rate(mis2dh_t *me, uint8_t ref)
   return BS_OK;
 }
 
-/**
- * @brief         MIS2DH get accel raw data
- *
- * @param[in]     me        Pointer to handle of MIS2DH module
- *
- * @attention     None
- *
- * @return
- * - BS_OK
- * - BS_ERROR
- */
-base_status_t m_mis2dh_get_raw_data(mis2dh_t *me)
+base_status_t mis2dh_get_raw_data(mis2dh_t *me)
 {
-
   uint8_t status;
   uint8_t data[6];
 
@@ -265,18 +200,7 @@ base_status_t m_mis2dh_get_raw_data(mis2dh_t *me)
   return BS_OK;
 }
 
-/**
- * @brief         MIS2DH enable axis
- *
- * @param[in]     me      Pointer to handle of MIS2DH module.
- * @param[in]     axis   Axis
- * @attention     None
- *
- * @return
- * - BS_OK
- * - BS_ERROR
- */
-base_status_t m_mis2dh_enable_axis(mis2dh_t *me, uint8_t axis)
+base_status_t mis2dh_enable_axis(mis2dh_t *me, uint8_t axis)
 {
   uint8_t tmp;
 
@@ -287,18 +211,7 @@ base_status_t m_mis2dh_enable_axis(mis2dh_t *me, uint8_t axis)
   return BS_OK;
 }
 
-/**
- * @brief         MIS2DH disble axis
- *
- * @param[in]     me      Pointer to handle of MIS2DH module.
- * @param[in]     axis   Axis
- * @attention     None
- *
- * @return
- * - BS_OK
- * - BS_ERROR
- */
-base_status_t m_mis2dh_disable_axis(mis2dh_t *me, uint8_t axis)
+base_status_t mis2dh_disable_axis(mis2dh_t *me, uint8_t axis)
 {
   uint8_t tmp;
 
@@ -309,17 +222,7 @@ base_status_t m_mis2dh_disable_axis(mis2dh_t *me, uint8_t axis)
   return BS_OK;
 }
 
-/**
- * @brief         MIS2DH reboot memory
- *
- * @param[in]     me      Pointer to handle of MIS2DH module.
- * @attention     None
- *
- * @return
- * - BS_OK
- * - BS_ERROR
- */
-base_status_t m_mis2dh_reboot_memory(mis2dh_t *me)
+base_status_t mis2dh_reboot_memory(mis2dh_t *me)
 {
   uint8_t tmp = (0B10000000);
 
@@ -328,17 +231,7 @@ base_status_t m_mis2dh_reboot_memory(mis2dh_t *me)
   return BS_OK;
 }
 
-/**
- * @brief         MIS2DH enter normal mode
- *
- * @param[in]     me      Pointer to handle of MIS2DH module.
- * @attention     None
- *
- * @return
- * - BS_OK
- * - BS_ERROR
- */
-base_status_t m_mis2dh_enter_normal_mode(mis2dh_t *me)
+base_status_t mis2dh_enter_normal_mode(mis2dh_t *me)
 {
   uint8_t tmp = (0B00000000);
 

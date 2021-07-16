@@ -8,6 +8,7 @@
         "bsp_lcd.h": "c",
         "lv_examples.h": "c",
         "lv_example_style.h": "c",
-        "lv_example_anim.h": "c"
+        "lv_example_anim.h": "c",
+        "mis2dh.h": "c"
     }
 }

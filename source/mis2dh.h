@@ -22,7 +22,7 @@ extern "C" {
 #include "bsp.h"
 
 /* Public defines ----------------------------------------------------- */
-#define MIS2DH_I2C_ADDR                  (0xC0 >> 1)
+#define MIS2DH_I2C_ADDR                       (0xC0 >> 1)
 
 /* Public enumerate/structure ----------------------------------------- */
 /**
@@ -49,15 +49,127 @@ typedef struct
 mis2dh_t;
 
 /* Public function prototypes ----------------------------------------- */
-base_status_t m_mis2dh_init(mis2dh_t *me);
-base_status_t m_mis2dh_set_resolution(mis2dh_t *me, uint8_t _res);
-base_status_t m_mis2dh_set_scale(mis2dh_t *me, uint8_t _sc);
-base_status_t m_mis2dh_set_refresh_rate(mis2dh_t *me, uint8_t _ref);
-base_status_t m_mis2dh_get_raw_data(mis2dh_t *me);
-base_status_t m_mis2dh_enable_axis(mis2dh_t *me, uint8_t _axis);
-base_status_t m_mis2dh_disable_axis(mis2dh_t *me, uint8_t _axis);
-base_status_t m_mis2dh_reboot_memory(mis2dh_t *me);
-base_status_t m_mis2dh_enter_normal_mode(mis2dh_t *me);
+/* Private function definitions ---------------------------------------- */
+/**
+ * @brief         MIS2DH init
+ *
+ * @param[in]     me      Pointer to handle of MIS2DH module.
+ *
+ * @attention     None
+ *
+ * @return
+ * - BS_OK
+ * - BS_ERROR
+ */
+base_status_t mis2dh_init(mis2dh_t *me);
+
+/**
+ * @brief         MIS2DH set resolution
+ *
+ * @param[in]     me            Pointer to handle of MIS2DH module.
+ * @param[in]     resolution    Resolution
+
+ *
+ * @attention     None
+ *
+ * @return
+ * - BS_OK
+ * - BS_ERROR
+ */
+base_status_t mis2dh_set_resolution(mis2dh_t *me, uint8_t _res);
+
+/**
+ * @brief         MIS2DH set scale
+ *
+ * @param[in]     me        Pointer to handle of MIS2DH module.
+ * @param[in]     scale     Scale
+
+ *
+ * @attention     None
+ *
+ * @return
+ * - BS_OK
+ * - BS_ERROR
+ */
+base_status_t mis2dh_set_scale(mis2dh_t *me, uint8_t _sc);
+
+/**
+ * @brief         MIS2DH set refresh rate
+ *
+ * @param[in]     me      Pointer to handle of MIS2DH module.
+ * @param[in]     ref      Scale
+
+ *
+ * @attention     None
+ *
+ * @return
+ * - BS_OK
+ * - BS_ERROR
+ */
+base_status_t mis2dh_set_refresh_rate(mis2dh_t *me, uint8_t _ref);
+
+/**
+ * @brief         MIS2DH get accel raw data
+ *
+ * @param[in]     me        Pointer to handle of MIS2DH module
+ *
+ * @attention     None
+ *
+ * @return
+ * - BS_OK
+ * - BS_ERROR
+ */
+base_status_t mis2dh_get_raw_data(mis2dh_t *me);
+
+/**
+ * @brief         MIS2DH enable axis
+ *
+ * @param[in]     me      Pointer to handle of MIS2DH module.
+ * @param[in]     axis    Axis x, y, z
+ * @attention     None
+ *
+ * @return
+ * - BS_OK
+ * - BS_ERROR
+ */
+base_status_t mis2dh_enable_axis(mis2dh_t *me, uint8_t _axis);
+
+/**
+ * @brief         MIS2DH disble axis
+ *
+ * @param[in]     me      Pointer to handle of MIS2DH module.
+ * @param[in]     axis    Axis x, y, z
+ * @attention     None
+ *
+ * @return
+ * - BS_OK
+ * - BS_ERROR
+ */
+base_status_t mis2dh_disable_axis(mis2dh_t *me, uint8_t _axis);
+
+/**
+ * @brief         MIS2DH reboot memory
+ *
+ * @param[in]     me      Pointer to handle of MIS2DH module.
+ * @attention     None
+ *
+ * @return
+ * - BS_OK
+ * - BS_ERROR
+ */
+base_status_t mis2dh_reboot_memory(mis2dh_t *me);
+
+/**
+ * @brief         MIS2DH enter normal mode
+ *
+ * @param[in]     me      Pointer to handle of MIS2DH module.
+ * @attention     None
+ *
+ * @return
+ * - BS_OK
+ * - BS_ERROR
+ */
+base_status_t mis2dh_enter_normal_mode(mis2dh_t *me);
 
 /* -------------------------------------------------------------------------- */
 #ifdef __cplusplus
