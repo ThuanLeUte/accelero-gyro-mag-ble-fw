@@ -48,6 +48,17 @@ typedef struct
 }
 mis2dh_t;
 
+/* Public function prototypes ----------------------------------------- */
+base_status_t m_mis2dh_init(mis2dh_t *me);
+base_status_t m_mis2dh_set_resolution(mis2dh_t *me, uint8_t _res);
+base_status_t m_mis2dh_set_scale(mis2dh_t *me, uint8_t _sc);
+base_status_t m_mis2dh_set_refresh_rate(mis2dh_t *me, uint8_t _ref);
+base_status_t m_mis2dh_get_raw_data(mis2dh_t *me);
+base_status_t m_mis2dh_enable_axis(mis2dh_t *me, uint8_t _axis);
+base_status_t m_mis2dh_disable_axis(mis2dh_t *me, uint8_t _axis);
+base_status_t m_mis2dh_reboot_memory(mis2dh_t *me);
+base_status_t m_mis2dh_enter_normal_mode(mis2dh_t *me);
+
 /* -------------------------------------------------------------------------- */
 #ifdef __cplusplus
 } // extern "C"
