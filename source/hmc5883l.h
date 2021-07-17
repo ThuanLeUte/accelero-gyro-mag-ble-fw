@@ -1,7 +1,7 @@
 /**
  * @file       hmc5883l.h
- * @copyright  Copyright (C) 2020 ThuanLe. All rights reserved.
- * @license    This project is released under the ThuanLe License.
+ * @copyright  Copyright (C) 2020 Hydratech. All rights reserved.
+ * @license    This project is released under the Hydratech License.
  * @version    1.0.0
  * @date       2021-03-22
  * @author     Thuan Le
@@ -120,6 +120,75 @@ hmc5883l_t;
  * - BS_ERROR
  */
 base_status_t hmc5883l_init(hmc5883l_t *me);
+
+/**
+ * @brief         HMC5883L read raw data
+ *
+ * @param[in]     me            Pointer to handle of HMC5883L module.
+ *
+ * @attention     None
+ *
+ * @return
+ * - BS_OK
+ * - BS_ERROR
+ */
+base_status_t hmc5883l_read_raw(hmc5883l_t *me);
+
+/**
+ * @brief         HMC5883L set measurement mode
+ *
+ * @param[in]     me            Pointer to handle of HMC5883L module.
+ * @param[in]     mode          Mode
+ *
+ * @attention     None
+ *
+ * @return
+ * - BS_OK
+ * - BS_ERROR
+ */
+base_status_t hmc5883l_set_measurement_mode(hmc5883l_t *me, hmc5883l_mode_t mode);
+
+/**
+ * @brief         HMC5883L set data rate
+ *
+ * @param[in]     me            Pointer to handle of HMC5883L module.
+ * @param[in]     mode          Data rate
+ *
+ * @attention     None
+ *
+ * @return
+ * - BS_OK
+ * - BS_ERROR
+ */
+base_status_t hmc5883l_set_data_rate(hmc5883l_t *me, hmc5883l_data_rate_t data_rate);
+
+/**
+ * @brief         HMC5883L set samples
+ *
+ * @param[in]     me            Pointer to handle of HMC5883L module.
+ * @param[in]     sample        Sample
+ *
+ * @attention     None
+ *
+ * @return
+ * - BS_OK
+ * - BS_ERROR
+ */
+base_status_t hmc5883l_set_samples(hmc5883l_t *me, hmc5883l_samples_t sample);
+
+/**
+ * @brief         HMC5883L set range
+ *
+ * @param[in]     me            Pointer to handle of HMC5883L module.
+ * @param[in]     range         Range
+ *
+ * @attention     None
+ *
+ * @return
+ * - BS_OK
+ * - BS_ERROR
+ */
+base_status_t hmc5883l_set_range(hmc5883l_t *me, hmc5883l_range_t range);
 
 /* -------------------------------------------------------------------------- */
 #ifdef __cplusplus

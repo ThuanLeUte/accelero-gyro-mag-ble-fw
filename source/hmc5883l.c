@@ -1,7 +1,7 @@
 /**
  * @file       hmc5883l.c
- * @copyright  Copyright (C) 2020 ThuanLe. All rights reserved.
- * @license    This project is released under the ThuanLe License.
+ * @copyright  Copyright (C) 2020 Hydratech. All rights reserved.
+ * @license    This project is released under the Hydratech License.
  * @version    1.0.0
  * @date       2021-03-22
  * @author     Thuan Le
@@ -37,11 +37,6 @@
 /* Public variables --------------------------------------------------- */
 /* Private variables -------------------------------------------------- */
 /* Private function prototypes ---------------------------------------- */
-static base_status_t m_hmc5883l_set_measurement_mode(hmc5883l_t *me, hmc5883l_mode_t mode);
-static base_status_t m_hmc5883l_set_data_rate(hmc5883l_t *me, hmc5883l_data_rate_t data_rate);
-static base_status_t m_hmc5883l_set_samples(hmc5883l_t *me, hmc5883l_samples_t sample);
-static base_status_t m_hmc5883l_set_range(hmc5883l_t *me, hmc5883l_range_t range);
-
 static base_status_t m_hmc5883l_read_reg(hmc5883l_t *me, uint8_t reg, uint8_t *p_data, uint32_t len);
 static base_status_t m_hmc5883l_write_reg(hmc5883l_t *me, uint8_t reg, uint8_t *p_data, uint32_t len);
 
@@ -51,16 +46,15 @@ base_status_t hmc5883l_init(hmc5883l_t *me)
   uint8_t identifier[3];
 
   if ((me == NULL) || (me->i2c_read == NULL) || (me->i2c_write == NULL))
-    return BS_ERROR;
+    return BS_ERROR_PARAMS;
 
   CHECK_STATUS(m_hmc5883l_read_reg(me, HMC5883L_REG_IDENT_A, &identifier[0], 1));
   CHECK_STATUS(m_hmc5883l_read_reg(me, HMC5883L_REG_IDENT_B, &identifier[1], 1));
   CHECK_STATUS(m_hmc5883l_read_reg(me, HMC5883L_REG_IDENT_C, &identifier[2], 1));
 
-  if ((HMC5883L_VALUE_IDENT_A == identifier[0]) ||
-      (HMC5883L_VALUE_IDENT_A == identifier[1]) ||
-      (HMC5883L_VALUE_IDENT_A == identifier[2]))
-    return BS_ERROR;
+  CHECK(HMC5883L_VALUE_IDENT_A == identifier[0]);
+  CHECK(HMC5883L_VALUE_IDENT_B == identifier[1]);
+  CHECK(HMC5883L_VALUE_IDENT_C == identifier[2]);
 
   return BS_OK;
 }
@@ -81,75 +75,53 @@ base_status_t hmc5883l_read_raw(hmc5883l_t *me)
   return BS_OK;
 }
 
-/* Private function definitions ---------------------------------------- */
-/**
- * @brief         HMC5883L read register
- *
- * @param[in]     me            Pointer to handle of HMC5883L module.
- * @param[in]     mode          Mode
- *
- * @attention     None
- *
- * @return
- * - BS_OK
- * - BS_ERROR
- */
-static base_status_t m_hmc5883l_set_measurement_mode(hmc5883l_t *me, hmc5883l_mode_t mode)
+base_status_t hmc5883l_set_measurement_mode(hmc5883l_t *me, hmc5883l_mode_t mode)
 {
-  CHECK_STATUS(m_hmc5883l_write_reg(me, HMC5883L_REG_MODE, mode, 1));
+  uint8_t value;
+
+  CHECK_STATUS(hmc5883l_read_reg(me, HMC5883L_REG_MODE, &value, 1));
+
+  value &= 0b11111100;
+  value |= mode;
+
+  CHECK_STATUS(hmc5883l_write_reg(me, HMC5883L_REG_MODE, value, 1));
 
   return BS_OK;
 }
 
-/**
- * @brief         HMC5883L read register
- *
- * @param[in]     me           Pointer to handle of HMC5883L module.
- * @param[in]     data_rate    Data rate
- *
- * @attention     None
- *
- * @return
- * - BS_OK
- * - BS_ERROR
- */
-static base_status_t m_hmc5883l_set_data_rate(hmc5883l_t *me, hmc5883l_data_rate_t data_rate)
+base_status_t hmc5883l_set_data_rate(hmc5883l_t *me, hmc5883l_data_rate_t data_rate)
 {
+  uint8_t value;
 
+  CHECK_STATUS(m_hmc5883l_read_reg(me, HMC5883L_REG_CONFIG_A, &value, 1));
+
+  value &= 0b11100011;
+  value |= (sample << 2);
+
+  CHECK_STATUS(m_hmc5883l_write_reg(me, HMC5883L_REG_CONFIG_A, value, 1));
+
+  return BS_OK;
 }
 
-/**
- * @brief         HMC5883L read register
- *
- * @param[in]     me          Pointer to handle of HMC5883L module.
- * @param[in]     sample      Sample
- *
- * @attention     None
- *
- * @return
- * - BS_OK
- * - BS_ERROR
- */
-static base_status_t m_hmc5883l_set_samples(hmc5883l_t *me, hmc5883l_samples_t sample)
+base_status_t hmc5883l_set_samples(hmc5883l_t *me, hmc5883l_samples_t sample)
 {
+  uint8_t value;
 
+  CHECK_STATUS(m_hmc5883l_read_reg(me, HMC5883L_REG_CONFIG_A, &value, 1));
+
+  value &= 0b10011111;
+  value |= (sample << 5);
+
+  CHECK_STATUS(m_hmc5883l_write_reg(me, HMC5883L_REG_CONFIG_A, value, 1));
+
+  return BS_OK;
 }
 
-/**
- * @brief         HMC5883L read register
- *
- * @param[in]     me          Pointer to handle of HMC5883L module.
- * @param[in]     range       Range
- *
- * @attention     None
- *
- * @return
- * - BS_OK
- * - BS_ERROR
- */
-static base_status_t m_hmc5883l_set_range(hmc5883l_t *me, hmc5883l_range_t range)
+base_status_t hmc5883l_set_range(hmc5883l_t *me, hmc5883l_range_t range)
 {
+  CHECK_STATUS(m_hmc5883l_write_reg(me, HMC5883L_REG_CONFIG_B, range << 5, 1));
 
+  return BS_OK;
 }
 
 /**
@@ -174,7 +146,7 @@ static base_status_t m_hmc5883l_read_reg(hmc5883l_t *me, uint8_t reg, uint8_t *p
 }
 
 /**
- * @brief         HMC5883L read register
+ * @brief         HMC5883L write register
  *
  * @param[in]     me      Pointer to handle of HMC5883L module.
  * @param[in]     reg     Register
