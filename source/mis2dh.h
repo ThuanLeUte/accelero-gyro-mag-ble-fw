@@ -26,19 +26,24 @@ extern "C" {
 
 /* Public enumerate/structure ----------------------------------------- */
 /**
+ * @brief MIS2DH raw data
+ */
+typedef struct
+{
+  float x;
+  float y;
+  float z;
+}
+mis2dh_raw_data_t;
+
+/**
  * @brief MIS2DH sensor struct
  */
 typedef struct 
 {
   uint8_t  device_address;  // I2C device address
 
-  struct
-  {
-    float x;
-    float y;
-    float z;
-  }
-  rawdata;
+  mis2dh_raw_data_t raw_data;
 
   // Read n-bytes from device's internal address <reg_addr> via I2C bus
   base_status_t (*i2c_read) (uint8_t slave_addr, uint8_t reg_addr, uint8_t *data, uint32_t len);
@@ -131,7 +136,7 @@ base_status_t mis2dh_get_raw_data(mis2dh_t *me);
  * - BS_OK
  * - BS_ERROR
  */
-base_status_t mis2dh_enable_axis(mis2dh_t *me, uint8_t _axis);
+base_status_t mis2dh_enable_axis(mis2dh_t *me, uint8_t axis);
 
 /**
  * @brief         MIS2DH disble axis
@@ -144,7 +149,7 @@ base_status_t mis2dh_enable_axis(mis2dh_t *me, uint8_t _axis);
  * - BS_OK
  * - BS_ERROR
  */
-base_status_t mis2dh_disable_axis(mis2dh_t *me, uint8_t _axis);
+base_status_t mis2dh_disable_axis(mis2dh_t *me, uint8_t axis);
 
 /**
  * @brief         MIS2DH reboot memory

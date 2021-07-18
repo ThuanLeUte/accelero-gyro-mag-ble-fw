@@ -190,9 +190,13 @@ base_status_t mis2dh_get_raw_data(mis2dh_t *me)
   if (status)
   {
     CHECK_STATUS(m_mis2dh_read_reg(me, MIS2DH_REG_OUT_X_L, data, 6));
-    me->rawdata.x = ((data[1] << 8) + data[0]);
-    me->rawdata.y = ((data[3] << 8) + data[2]);
-    me->rawdata.z = ((data[5] << 8) + data[4]);
+    me->raw_data.x = ((data[1] << 8) + data[0]);
+    me->raw_data.y = ((data[3] << 8) + data[2]);
+    me->raw_data.z = ((data[5] << 8) + data[4]);
+  }
+  else
+  {
+    return BS_ERROR;
   }
 
   return BS_OK;

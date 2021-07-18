@@ -37,7 +37,20 @@ extern "C" {
  * - BS_OK
  * - BS_ERROR
  */
-base_status_t bsp_accelero_init(void);
+base_status_t bsp_accel_init(void);
+
+/**
+ * @brief         BSP Accelerometer get raw data
+ *
+ * @param[in]     raw_data  Accelerometer raw data
+ *
+ * @attention     None
+ *
+ * @return
+ * - BS_OK
+ * - BS_ERROR
+ */
+base_status_t bsp_accel_get_raw_data(mis2dh_raw_data_t *raw_data);
 
 /* -------------------------------------------------------------------------- */
 #ifdef __cplusplus
