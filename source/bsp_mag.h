@@ -1,7 +1,7 @@
 /**
  * @file       bsp_mag.h
- * @copyright  Copyright (C) 2020 ThuanLe. All rights reserved.
- * @license    This project is released under the ThuanLe License.
+ * @copyright  Copyright (C) 2020 Hydratech. All rights reserved.
+ * @license    This project is released under the Hydratech License.
  * @version    1.0.0
  * @date       2021-03-24
  * @author     Thuan Le
@@ -38,6 +38,21 @@ extern "C" {
  * - BS_ERROR
  */
 base_status_t bsp_mag_init(void);
+
+/**
+ * @brief         BSP Magnetometer sensor init
+ *
+ * @param[in]     x_axis    X axis
+ * @param[in]     y_axis    Y axis
+ * @param[in]     z_axis    Z axis
+ *
+ * @attention     None
+ *
+ * @return
+ * - BS_OK
+ * - BS_ERROR
+ */
+base_status_t bsp_mag_read(float *x_axis, float *y_axis, float *z_axis);
 
 /* -------------------------------------------------------------------------- */
 #ifdef __cplusplus
