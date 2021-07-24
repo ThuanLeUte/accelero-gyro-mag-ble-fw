@@ -76,15 +76,9 @@ void bsp_delay_ms(uint32_t ms)
 void bsp_gpio_write(uint8_t pin , uint8_t state)
 {
   if (0 == state)
-  {
     nrfx_gpiote_out_clear(pin);
-    NRF_LOG_INFO("nrfx_gpiote_out_clear");
-  }
   else
-  {
     nrfx_gpiote_out_set(pin);
-    NRF_LOG_INFO("nrfx_gpiote_out_set");
-  }
 }
 
 /* Private function definitions ---------------------------------------- */

@@ -151,23 +151,14 @@ void bsp_lcd_init(void)
 
   gc9a01_init(&m_gc9a01);
 
-  bsp_lcd_fill(LCD_WHITE);
-
   // Draw background image
   bsp_lcd_display_image(LCD_BACKGROUND);
 
   // Draw baterry image
   bsp_lcd_display_image(LCD_BATT_FULL);
 
-  bsp_lcd_display_spo2_number(100);
-  bsp_lcd_display_heartrate_number(74);
-
-  for (int i = 80; i < 101; i++)
-  {
-    bsp_lcd_display_spo2_number(i);
-    bsp_lcd_display_heartrate_number(i);
-    nrf_delay_ms(1000);
-  }
+  bsp_lcd_display_spo2_number(0);
+  bsp_lcd_display_heartrate_number(0);
 }
 
 /* Public function for project ---------------------------------------- */

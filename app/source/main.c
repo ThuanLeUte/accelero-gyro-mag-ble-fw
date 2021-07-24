@@ -86,7 +86,7 @@
 /* Private macros ----------------------------------------------------- */
 BLE_BOS_DEF(m_bos);                                                                 /**< BLE BOS service instance. */
 BLE_HRNS_DEF(m_hrns);                                                               /**< BLE HRNS service instance. */
-BLE_BTS_DEF(m_bts);                                                                /**< BLE BTS service instance. */
+BLE_BTS_DEF(m_bts);                                                                 /**< BLE BTS service instance. */
 BLE_BAS_DEF(m_bas);                                                                 /**< Structure used to identify the battery service. */
 NRF_BLE_GATT_DEF(m_gatt);                                                           /**< GATT module instance. */
 NRF_BLE_QWR_DEF(m_qwr);                                                             /**< Context for the Queued Write module.*/
@@ -99,12 +99,10 @@ static uint16_t   m_conn_handle          = BLE_CONN_HANDLE_INVALID;             
 static ble_uuid_t m_adv_uuids[]          =                                          /**< Universally unique service identifier. */
 {
   {BLE_UUID_HRNS_SERVICE,               HRNS_SERVICE_UUID_TYPE},
-  // {BLE_UUID_BOS_SERVICE,                BOS_SERVICE_UUID_TYPE},
   {BLE_UUID_BATTERY_SERVICE,            BLE_UUID_TYPE_BLE},
   {BLE_UUID_DEVICE_INFORMATION_SERVICE, BLE_UUID_TYPE_BLE}
 };
 
-uint32_t app_time;
 /* Private function prototypes ---------------------------------------- */
 static void timers_init(void);
 static void gap_params_init(void);
@@ -126,7 +124,7 @@ static void advertising_start(void);
 static void battery_level_meas_timeout_handler(void * p_context);
 static void body_temp_meas_timeout_handler(void * p_context);
 
-static void battery_level_update(void);
+static bool battery_level_update(uint8_t *batt_level);
 static void body_temp_update(void);
 
 #ifdef TEMPERATURE_BOARD
@@ -937,13 +935,25 @@ static void advertising_start(void)
  */
 static void battery_level_meas_timeout_handler(void * p_context)
 {
-  // static bool enable = false;
-
-  // bsp_lcd_display(enable);
-  // enable = ~enable;
+  uint8_t battery_level;
 
   UNUSED_PARAMETER(p_context);
-  battery_level_update();
+
+  if (battery_level_update(&battery_level))
+  {
+    NRF_LOG_INFO( "Battery level : %d percent", battery_level);
+
+    if (battery_level < 10)
+      bsp_lcd_display_image(LCD_BATT_0);
+    else if (battery_level >= 10 && battery_level < 25)
+      bsp_lcd_display_image(LCD_BATT_25);
+    else if (battery_level >= 25 && battery_level < 50)
+      bsp_lcd_display_image(LCD_BATT_50);
+    else if (battery_level >= 50 && battery_level < 75)
+      bsp_lcd_display_image(LCD_BATT_75);
+    else if (battery_level >= 75)
+      bsp_lcd_display_image(LCD_BATT_FULL);
+  }
 }
 
 /**
@@ -952,7 +962,7 @@ static void battery_level_meas_timeout_handler(void * p_context)
  * @param[in]     p_context   Pointer to context
  *
  * @attention     None
- *
+ *=
  * @return        None
  */
 static void body_temp_meas_timeout_handler(void * p_context)
@@ -964,13 +974,15 @@ static void body_temp_meas_timeout_handler(void * p_context)
 /**
  * @brief         Function for handling the battery level update
  *
- * @param[in]     None
+ * @param[out]    batt_level  Pointer to battery level
  *
  * @attention     None
  *
- * @return        None
+ * @return
+ *  true:  Success
+ *  false: Error
  */
-static void battery_level_update(void)
+static bool battery_level_update(uint8_t *batt_level)
 {
   ret_code_t err_code;
   uint8_t battery_level              = 0;
@@ -983,8 +995,8 @@ static void battery_level_update(void)
 
   if (battery_cal_time >= 10)
   {
-    battery_level = sum_battery_level / battery_cal_time;
-    NRF_LOG_INFO( "Battery avg : %d percent", battery_level);
+    *batt_level = sum_battery_level / battery_cal_time;
+    NRF_LOG_INFO( "Battery avg : %d percent", *batt_level);
     battery_cal_time  = 0;
     sum_battery_level = 0;
 
@@ -997,9 +1009,11 @@ static void battery_level_update(void)
     {
       APP_ERROR_HANDLER(err_code);
     }
+
+    return true;
   }
 
-  // NRF_LOG_INFO( "Battery : %d percent", battery_level);
+  return false;
 }
 
 /**
