@@ -22,17 +22,22 @@ Dialog DLL:      TCM.DLL V1.42.0.0
  
 <h2>Project:</h2>
 D:\02_Mega\06_Projects\09_Bio_Education_Board\01_Software\02_Firmware\accelero-gyro-mag-ble-fw\app\arm5_no_packs\ble_oxymeter.uvprojx
-Project File Date:  07/23/2021
+Project File Date:  07/24/2021
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'nrf52832_xxaa'
 Note: source file '..\..\components\libraries\bsp\bsp.c' - object file renamed from '.\_build\bsp.o' to '.\_build\bsp_1.o'.
-compiling main.c...
+compiling bsp_lcd.c...
+..\source\bsp_lcd.c(257): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+    num = num + 0.05;
+..\source\bsp_lcd.c(553): warning:  #177-D: function "m_bsp_lcd_fill_square"  was declared but never referenced
+  static void m_bsp_lcd_fill_square(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color)
+..\source\bsp_lcd.c: 2 warnings, 0 errors
 linking...
-Program Size: Code=44860 RO-data=158536 RW-data=924 ZI-data=18092  
+Program Size: Code=32624 RO-data=280492 RW-data=856 ZI-data=12512  
 FromELF: creating hex file...
-".\_build\nrf52832_xxaa.axf" - 0 Error(s), 0 Warning(s).
+".\_build\nrf52832_xxaa.axf" - 0 Error(s), 2 Warning(s).
 
 <h2>Software Packages used:</h2>
 

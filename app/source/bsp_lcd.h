@@ -25,17 +25,28 @@ extern "C" {
 /* Public enumerate/structure ----------------------------------------- */
 typedef enum
 {
-  LCD_BACKGROUND,
-  LCD_BATT_FULL,
-  LCD_BATT_75,
-  LCD_BATT_50,
-  LCD_BATT_25,
-  LCD_BATT_0,
-  LCD_DOT,
-  LCD_DOT_N,
-  LCD_SP02_NUM,
-  LCD_HEART_RATE_NUM,
-  LCD_ITEM_CNT
+   LCD_SPO2_BG
+  ,LCD_TEMP_BG
+  ,LCD_BATT_FULL
+  ,LCD_BATT_75
+  ,LCD_BATT_50
+  ,LCD_BATT_25
+  ,LCD_BATT_0
+  ,LCD_DOT
+  ,LCD_DOT_N
+  ,LCD_BIG_DOT
+  ,LCD_SMALL_DOT
+  ,LCD_BIG_C
+  ,LCD_BIG_F
+  ,LCD_BIG_C_F_N
+  ,LCD_SMALL_C
+  ,LCD_SMALL_F
+  ,LCD_SMALL_C_F_N
+  ,LCD_SP02_NUM
+  ,LCD_HEART_RATE_NUM
+  ,LCD_TEMP_BIG_NUM
+  ,LCD_TEMP_SMALL_NUM
+  ,LCD_ITEM_CNT
 }
 bsp_lcd_item_t;
 
@@ -66,7 +77,7 @@ void bsp_lcd_init(void);
 void bsp_lcd_display_image(bsp_lcd_item_t item);
 
 /**
- * @brief         LDC display number
+ * @brief         LCD SPO2 display number
  *
  * @param[in]     item    Image item
  * @param[in]     num     Number
@@ -75,9 +86,25 @@ void bsp_lcd_display_image(bsp_lcd_item_t item);
  *
  * @return        None
  */
-void bsp_lcd_display_number(bsp_lcd_item_t item, uint8_t num);
-#define bsp_lcd_display_spo2_number(num)      bsp_lcd_display_number(LCD_SP02_NUM, num)
-#define bsp_lcd_display_heartrate_number(num) bsp_lcd_display_number(LCD_HEART_RATE_NUM , num)
+void bsp_lcd_spo2_display_number(bsp_lcd_item_t item, uint8_t num);
+#define bsp_lcd_display_spo2_number(num)      bsp_lcd_spo2_display_number(LCD_SP02_NUM, num)
+#define bsp_lcd_display_heartrate_number(num) bsp_lcd_spo2_display_number(LCD_HEART_RATE_NUM , num)
+
+/**
+ * @brief         LCD temperature display number
+ *
+ * @param[in]     item    Image item
+ * @param[in]     num     Number
+ *
+ * @attention     None
+ *
+ * @return        None
+ */
+void bsp_lcd_temp_display_number(bsp_lcd_item_t item, float num);
+#define bsp_lcd_display_big_temp_number(num)   bsp_lcd_temp_display_number(LCD_TEMP_BIG_NUM, num)
+#define bsp_lcd_display_small_temp_number(num) bsp_lcd_temp_display_number(LCD_TEMP_SMALL_NUM , num)
+
+void bsp_lcd_temp_display_celsius_big_num(bool enable);
 
 /* Public function basic --------------------------------------------- */
 /**

@@ -25,6 +25,7 @@ extern "C" {
 /* Public defines ----------------------------------------------------- */
                                     // Schematic
 // PIN NAME PORT 0 ``````````````````````````````
+#define IO_BTN                  (03)    // Button pin
 #define IO_I2C0_SCL             (11)    // SCL signal pin
 #define IO_I2C0_SDA             (12)    // SDA signal pin
 #define IO_OB1203_INTR          (13)    // OB1203 interrupt pin

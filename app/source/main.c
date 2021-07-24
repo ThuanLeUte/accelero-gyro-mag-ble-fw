@@ -102,6 +102,7 @@ static ble_uuid_t m_adv_uuids[]          =                                      
   {BLE_UUID_BATTERY_SERVICE,            BLE_UUID_TYPE_BLE},
   {BLE_UUID_DEVICE_INFORMATION_SERVICE, BLE_UUID_TYPE_BLE}
 };
+static bool m_is_big_num_celsius = true;
 
 /* Private function prototypes ---------------------------------------- */
 static void timers_init(void);
@@ -1027,14 +1028,29 @@ static bool battery_level_update(uint8_t *batt_level)
  */
 static void body_temp_update(void)
 {
+#define C_TO_F(temp_val)  ((temp_val) * 9 / 5 + 32)
+
   ret_code_t err_code;
-  float m_human_body_temp = 0;
+  float human_body_temp = 0;
 
-  sys_temp_get(&m_human_body_temp);
+  sys_temp_get(&human_body_temp);
 
-  NRF_LOG_INFO( "Temperature: " NRF_LOG_FLOAT_MARKER, NRF_LOG_FLOAT(m_human_body_temp));
+  if (m_is_big_num_celsius)
+  {
+    bsp_lcd_temp_display_celsius_big_num(true);
+    bsp_lcd_display_big_temp_number(human_body_temp);
+    bsp_lcd_display_small_temp_number(C_TO_F(human_body_temp));
+  }
+  else
+  {
+    bsp_lcd_temp_display_celsius_big_num(false);
+    bsp_lcd_display_big_temp_number(C_TO_F(human_body_temp));
+    bsp_lcd_display_small_temp_number(human_body_temp);
+  }
 
-  err_code = ble_bts_body_temp_update(&m_bts, m_human_body_temp, BLE_CONN_HANDLE_ALL);
+  NRF_LOG_INFO( "Temperature: " NRF_LOG_FLOAT_MARKER, NRF_LOG_FLOAT(human_body_temp));
+
+  err_code = ble_bts_body_temp_update(&m_bts, human_body_temp, BLE_CONN_HANDLE_ALL);
   if ((err_code != NRF_SUCCESS) &&
       (err_code != NRF_ERROR_INVALID_STATE) &&
       (err_code != NRF_ERROR_RESOURCES) &&
@@ -1043,6 +1059,13 @@ static void body_temp_update(void)
   {
     APP_ERROR_HANDLER(err_code);
   }
+}
+
+void bsp_intr_handler(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action)
+{
+  NRF_LOG_INFO( "Button is pressed");
+  m_is_big_num_celsius = !m_is_big_num_celsius;
+  body_temp_update();
 }
 
 /**

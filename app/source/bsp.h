@@ -34,7 +34,7 @@ extern "C" {
 #include "bsp_io_11.h"
 
 /* Public defines ----------------------------------------------------- */
-// #define TEMPERATURE_BOARD
+#define TEMPERATURE_BOARD
 
 /* Public enumerate/structure ----------------------------------------- */
 /**
@@ -124,6 +124,8 @@ int bsp_i2c_read(uint8_t slave_addr, uint8_t reg_addr, uint8_t *p_data, uint32_t
 uint32_t bsp_time_now(void);
 
 void bsp_intr_pin_handler(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action);
+
+void bsp_intr_handler(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action);
 
 void bsp_delay_ms(uint32_t ms);
 

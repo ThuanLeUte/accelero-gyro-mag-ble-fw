@@ -135,6 +135,15 @@ static void m_bsp_gpio_init(void)
 
   nrf_drv_gpiote_in_event_enable(IO_OB1203_INTR, true);
 
+  // Button pin config
+  nrf_drv_gpiote_in_config_t btn_config = GPIOTE_CONFIG_IN_SENSE_HITOLO(true);
+  btn_config.pull = NRF_GPIO_PIN_PULLUP;
+
+  err_code = nrf_drv_gpiote_in_init(IO_BTN, &btn_config, bsp_intr_handler);
+  APP_ERROR_CHECK(err_code);
+
+  nrf_drv_gpiote_in_event_enable(IO_BTN, true);
+
   // LCD pin config
   nrf_drv_gpiote_out_config_t out_config = NRFX_GPIOTE_CONFIG_OUT_TASK_TOGGLE(true);
   err_code = nrf_drv_gpiote_out_init(IO_LCD_BACKLIGHT, &out_config);
