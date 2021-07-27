@@ -39,7 +39,19 @@ extern "C" {
  */
 base_status_t bsp_imu_init(void);
 
-base_status_t bsp_gyro_accel_get(ScaledData_Def myAccelScaled, ScaledData_Def myGyroScaled);
+/**
+ * @brief         BSP IMU get data
+ *
+ * @param[in]     accel_scaled  Accel scaled data
+ * @param[in]     gyro_scaled   Gyro scaled data
+ *
+ * @attention     None
+ *
+ * @return
+ * - BS_OK
+ * - BS_ERROR
+ */
+base_status_t bsp_gyro_accel_get(mpu9250_scaled_data_t *accel_scaled, mpu9250_scaled_data_t *gyro_scaled)
 
 /* -------------------------------------------------------------------------- */
 #ifdef __cplusplus
