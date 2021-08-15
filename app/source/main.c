@@ -30,17 +30,15 @@
 #include "nrf_pwr_mgmt.h"
 #include "nrf_delay.h"
 
+#include "sys_bm.h"
+#include "sys_temp.h"
 #include "ble_bas.h"
 #include "ble_dis.h"
-#include "ble_blood_oxygen_service.h"
-#include "ble_heart_rate_service.h"
 #include "ble_body_temp_service.h"
 #include "bsp.h"
-#include "sys_temp.h"
-#include "sys_bm.h"
-#include "sys_po.h"
+#include "bsp_accel.h"
+#include "bsp_mag.h"
 #include "nrf52832_peripherals.h"
-#include "bsp_lcd.h"
 
 #if defined(UART_PRESENT)
 #include "nrf_uart.h"
@@ -83,10 +81,8 @@
 
 #define DEAD_BEEF                       0xDEADBEEF                                  /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
 
-/* Private macros ----------------------------------------------------- */
-BLE_BOS_DEF(m_bos);                                                                 /**< BLE BOS service instance. */
-BLE_HRNS_DEF(m_hrns);                                                               /**< BLE HRNS service instance. */
-BLE_BTS_DEF(m_bts);                                                                 /**< BLE BTS service instance. */
+/* Private macros ----------------------------------------------------- */                                                            /**< BLE HRNS service instance. */
+BLE_BTS_DEF(m_bts);                                                                /**< BLE BTS service instance. */
 BLE_BAS_DEF(m_bas);                                                                 /**< Structure used to identify the battery service. */
 NRF_BLE_GATT_DEF(m_gatt);                                                           /**< GATT module instance. */
 NRF_BLE_QWR_DEF(m_qwr);                                                             /**< Context for the Queued Write module.*/
@@ -98,12 +94,11 @@ APP_TIMER_DEF(m_battery_timer_id);                                              
 static uint16_t   m_conn_handle          = BLE_CONN_HANDLE_INVALID;                 /**< Handle of the current connection. */
 static ble_uuid_t m_adv_uuids[]          =                                          /**< Universally unique service identifier. */
 {
-  {BLE_UUID_HRNS_SERVICE,               HRNS_SERVICE_UUID_TYPE},
   {BLE_UUID_BATTERY_SERVICE,            BLE_UUID_TYPE_BLE},
   {BLE_UUID_DEVICE_INFORMATION_SERVICE, BLE_UUID_TYPE_BLE}
 };
-static bool m_is_big_num_celsius = true;
 
+uint32_t app_time;
 /* Private function prototypes ---------------------------------------- */
 static void timers_init(void);
 static void gap_params_init(void);
@@ -125,15 +120,11 @@ static void advertising_start(void);
 static void battery_level_meas_timeout_handler(void * p_context);
 static void body_temp_meas_timeout_handler(void * p_context);
 
-static bool battery_level_update(uint8_t *batt_level);
+static void battery_level_update(void);
 static void body_temp_update(void);
 
-#ifdef TEMPERATURE_BOARD
 static void bts_service_init(void);
-#else
-static void bos_service_init(void);
-static void hrns_service_init(void);
-#endif
+
 
 static void bas_service_init(void);
 static void dis_service_init(void);
@@ -159,89 +150,17 @@ int main(void)
 
   bsp_hw_init();          // Bsp init
   sys_bm_init();          // Battery monitor init
-  bsp_lcd_init();         // LCD init
 
   // Start execution.
   application_timers_start();
   advertising_start();
 
-#ifdef TEMPERATURE_BOARD
-
-  sys_temp_init();         // Temperature sensor init
-
-#else
-
-  sys_po_main();            // Pulse oxigen run
-
-#endif
+  // bsp_accel_init();
+  bsp_mag_init();
 
   for (;;)
   {
     idle_state_handle();
-  }
-}
-
-void sys_po_blood_oxygen_notify(uint8_t blood_oxygen)
-{
-  ret_code_t err_code;
-
-  bsp_lcd_display_spo2_number(blood_oxygen);
-
-  err_code = ble_bos_blood_oxygen_update(&m_bos, blood_oxygen, BLE_CONN_HANDLE_ALL);
-  if ((err_code != NRF_SUCCESS) &&
-      (err_code != NRF_ERROR_INVALID_STATE) &&
-      (err_code != NRF_ERROR_RESOURCES) &&
-      (err_code != NRF_ERROR_BUSY) &&
-      (err_code != BLE_ERROR_GATTS_SYS_ATTR_MISSING))
-  {
-    APP_ERROR_HANDLER(err_code);
-  }
-}
-
-void sys_po_heart_rate_notify(uint8_t heart_rate)
-{
-  ret_code_t err_code;
-
-  bsp_lcd_display_heartrate_number(heart_rate);
-
-  err_code = ble_hrns_heart_rate_update(&m_hrns, heart_rate, BLE_CONN_HANDLE_ALL);
-  if ((err_code != NRF_SUCCESS) &&
-      (err_code != NRF_ERROR_INVALID_STATE) &&
-      (err_code != NRF_ERROR_RESOURCES) &&
-      (err_code != NRF_ERROR_BUSY) &&
-      (err_code != BLE_ERROR_GATTS_SYS_ATTR_MISSING))
-  {
-    APP_ERROR_HANDLER(err_code);
-  }
-}
-
-void sys_po_r_data_notify(uint32_t r_data)
-{
-  ret_code_t err_code;
-
-  err_code = ble_bos_r_data_update(&m_bos, r_data, BLE_CONN_HANDLE_ALL);
-  if ((err_code != NRF_SUCCESS) &&
-      (err_code != NRF_ERROR_INVALID_STATE) &&
-      (err_code != NRF_ERROR_RESOURCES) &&
-      (err_code != NRF_ERROR_BUSY) &&
-      (err_code != BLE_ERROR_GATTS_SYS_ATTR_MISSING))
-  {
-    APP_ERROR_HANDLER(err_code);
-  }
-}
-
-void sys_po_ir_data_notify(uint32_t ir_data)
-{
-  ret_code_t err_code;
-
-  err_code = ble_bos_ir_data_update(&m_bos, ir_data, BLE_CONN_HANDLE_ALL);
-  if ((err_code != NRF_SUCCESS) &&
-      (err_code != NRF_ERROR_INVALID_STATE) &&
-      (err_code != NRF_ERROR_RESOURCES) &&
-      (err_code != NRF_ERROR_BUSY) &&
-      (err_code != BLE_ERROR_GATTS_SYS_ATTR_MISSING))
-  {
-    APP_ERROR_HANDLER(err_code);
   }
 }
 
@@ -334,71 +253,6 @@ static void nrf_qwr_error_handler(uint32_t nrf_error)
   APP_ERROR_HANDLER(nrf_error);
 }
 
-#ifndef TEMPERATURE_BOARD
-/**
- * @brief         Function for BOS service init
- *
- * @param[in]     None
- *
- * @attention     None
- *
- * @return        None
- */
-static void bos_service_init(void)
-{
-  uint32_t           err_code;
-  ble_bos_init_t     bos_init;
-
-  // Initialize BOS.
-  memset(&bos_init, 0, sizeof(bos_init));
-
-  bos_init.evt_handler          = NULL;
-  bos_init.support_notification = true;
-  bos_init.p_report_ref         = NULL;
-  bos_init.initial_blood_oxygen = 0;
-
-  // Here the sec Blood oxygen Service can be changed/increased.
-  bos_init.bl_rd_sec        = SEC_OPEN;
-  bos_init.bl_cccd_wr_sec   = SEC_OPEN;
-  bos_init.bl_report_rd_sec = SEC_OPEN;
-
-  err_code = ble_bos_init(&m_bos, &bos_init);
-  APP_ERROR_CHECK(err_code);
-}
-
-/**
- * @brief         Function for HRNS service init
- *
- * @param[in]     None
- *
- * @attention     None
- *
- * @return        None
- */
-static void hrns_service_init(void)
-{
-  uint32_t           err_code;
-  ble_hrns_init_t     hrns_init;
-
-// Initialize HRNS.
-  memset(&hrns_init, 0, sizeof(hrns_init));
-
-  hrns_init.evt_handler          = NULL;
-  hrns_init.support_notification = true;
-  hrns_init.p_report_ref         = NULL;
-  hrns_init.initial_heart_rate   = 0;
-
-  // Here the sec Heart rate Service can be changed/increased.
-  hrns_init.bl_rd_sec        = SEC_OPEN;
-  hrns_init.bl_cccd_wr_sec   = SEC_OPEN;
-  hrns_init.bl_report_rd_sec = SEC_OPEN;
-
-  err_code = ble_hrns_init(&m_hrns, &hrns_init);
-  APP_ERROR_CHECK(err_code);
-}
-
-#else
-
 /**
  * @brief         Function for BTS service init
  *
@@ -429,7 +283,6 @@ static void bts_service_init(void)
   err_code = ble_bts_init(&m_bts, &bts_init);
   APP_ERROR_CHECK(err_code);
 }
-#endif
 
 /**
  * @brief         Function for BAS service init
@@ -507,20 +360,8 @@ static void services_init(void)
   err_code = nrf_ble_qwr_init(&m_qwr, &qwr_init);
   APP_ERROR_CHECK(err_code);
 
-#ifdef TEMPERATURE_BOARD
-
   // Initialize Body temperature Service
   bts_service_init();
-
-#else
-
-  // Initialize Blood oxygen Service
-  bos_service_init();
-
-  // Initialize Heart rate Service
-  hrns_service_init();
-
-#endif
 
   // Initialize Battery Service.
   bas_service_init();
@@ -936,25 +777,8 @@ static void advertising_start(void)
  */
 static void battery_level_meas_timeout_handler(void * p_context)
 {
-  uint8_t battery_level;
-
   UNUSED_PARAMETER(p_context);
-
-  if (battery_level_update(&battery_level))
-  {
-    NRF_LOG_INFO( "Battery level : %d percent", battery_level);
-
-    if (battery_level < 10)
-      bsp_lcd_display_image(LCD_BATT_0);
-    else if (battery_level >= 10 && battery_level < 25)
-      bsp_lcd_display_image(LCD_BATT_25);
-    else if (battery_level >= 25 && battery_level < 50)
-      bsp_lcd_display_image(LCD_BATT_50);
-    else if (battery_level >= 50 && battery_level < 75)
-      bsp_lcd_display_image(LCD_BATT_75);
-    else if (battery_level >= 75)
-      bsp_lcd_display_image(LCD_BATT_FULL);
-  }
+  battery_level_update();
 }
 
 /**
@@ -963,7 +787,7 @@ static void battery_level_meas_timeout_handler(void * p_context)
  * @param[in]     p_context   Pointer to context
  *
  * @attention     None
- *=
+ *
  * @return        None
  */
 static void body_temp_meas_timeout_handler(void * p_context)
@@ -975,15 +799,13 @@ static void body_temp_meas_timeout_handler(void * p_context)
 /**
  * @brief         Function for handling the battery level update
  *
- * @param[out]    batt_level  Pointer to battery level
+ * @param[in]     None
  *
  * @attention     None
  *
- * @return
- *  true:  Success
- *  false: Error
+ * @return        None
  */
-static bool battery_level_update(uint8_t *batt_level)
+static void battery_level_update(void)
 {
   ret_code_t err_code;
   uint8_t battery_level              = 0;
@@ -996,8 +818,8 @@ static bool battery_level_update(uint8_t *batt_level)
 
   if (battery_cal_time >= 10)
   {
-    *batt_level = sum_battery_level / battery_cal_time;
-    NRF_LOG_INFO( "Battery avg : %d percent", *batt_level);
+    battery_level = sum_battery_level / battery_cal_time;
+    NRF_LOG_INFO( "Battery avg : %d percent", battery_level);
     battery_cal_time  = 0;
     sum_battery_level = 0;
 
@@ -1010,11 +832,9 @@ static bool battery_level_update(uint8_t *batt_level)
     {
       APP_ERROR_HANDLER(err_code);
     }
-
-    return true;
   }
 
-  return false;
+  // NRF_LOG_INFO( "Battery : %d percent", battery_level);
 }
 
 /**
@@ -1028,29 +848,19 @@ static bool battery_level_update(uint8_t *batt_level)
  */
 static void body_temp_update(void)
 {
-#define C_TO_F(temp_val)  ((temp_val) * 9 / 5 + 32)
-
   ret_code_t err_code;
-  float human_body_temp = 0;
+  float m_human_body_temp = 0;
+  mis2dh_raw_data_t raw_data;
 
-  sys_temp_get(&human_body_temp);
+  // bsp_accel_get_raw_data(&raw_data);
+  bsp_mag_read(&raw_data.x, &raw_data.y, &raw_data.z);
 
-  if (m_is_big_num_celsius)
-  {
-    bsp_lcd_temp_display_celsius_big_num(true);
-    bsp_lcd_display_big_temp_number(human_body_temp);
-    bsp_lcd_display_small_temp_number(C_TO_F(human_body_temp));
-  }
-  else
-  {
-    bsp_lcd_temp_display_celsius_big_num(false);
-    bsp_lcd_display_big_temp_number(C_TO_F(human_body_temp));
-    bsp_lcd_display_small_temp_number(human_body_temp);
-  }
+  NRF_LOG_INFO( "X Axis: " NRF_LOG_FLOAT_MARKER, NRF_LOG_FLOAT(raw_data.x));
+  NRF_LOG_INFO( "Y Axis: " NRF_LOG_FLOAT_MARKER, NRF_LOG_FLOAT(raw_data.y));
+  NRF_LOG_INFO( "Z Axis: " NRF_LOG_FLOAT_MARKER, NRF_LOG_FLOAT(raw_data.z));
 
-  NRF_LOG_INFO( "Temperature: " NRF_LOG_FLOAT_MARKER, NRF_LOG_FLOAT(human_body_temp));
 
-  err_code = ble_bts_body_temp_update(&m_bts, human_body_temp, BLE_CONN_HANDLE_ALL);
+  err_code = ble_bts_body_temp_update(&m_bts, m_human_body_temp, BLE_CONN_HANDLE_ALL);
   if ((err_code != NRF_SUCCESS) &&
       (err_code != NRF_ERROR_INVALID_STATE) &&
       (err_code != NRF_ERROR_RESOURCES) &&
@@ -1059,13 +869,6 @@ static void body_temp_update(void)
   {
     APP_ERROR_HANDLER(err_code);
   }
-}
-
-void bsp_intr_handler(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action)
-{
-  NRF_LOG_INFO( "Button is pressed");
-  m_is_big_num_celsius = !m_is_big_num_celsius;
-  body_temp_update();
 }
 
 /**
@@ -1082,14 +885,9 @@ static void application_timers_start(void)
   ret_code_t err_code;
 
   // Start application timers.
-#ifdef TEMPERATURE_BOARD
-
   err_code = app_timer_start(m_body_temp_timer_id, BODY_TEMP_MEAS_INTERVAL, NULL);
   APP_ERROR_CHECK(err_code);
 
-#else
-
-#endif
 
   err_code = app_timer_start(m_battery_timer_id, BODY_TEMP_MEAS_INTERVAL, NULL);
   APP_ERROR_CHECK(err_code);
