@@ -40,9 +40,9 @@ extern "C" {
 base_status_t bsp_accel_init(void);
 
 /**
- * @brief         BSP Accelerometer get raw data
+ * @brief         BSP Accelerometer get raw axis
  *
- * @param[in]     raw_data  Accelerometer raw data
+ * @param[in]     raw_axis  Accelerometer raw axis
  *
  * @attention     None
  *
@@ -50,7 +50,33 @@ base_status_t bsp_accel_init(void);
  * - BS_OK
  * - BS_ERROR
  */
-base_status_t bsp_accel_get_raw_data(mis2dh_raw_data_t *raw_data);
+base_status_t bsp_accel_get_raw_axis(mis2dh_data_t *raw_axis);
+
+/**
+ * @brief         BSP Accelerometer get g axis
+ *
+ * @param[in]     g_axis   Accelerometer g axis
+ *
+ * @attention     None
+ *
+ * @return
+ * - BS_OK
+ * - BS_ERROR
+ */
+base_status_t bsp_accel_get_g_axis(mis2dh_data_t *g_axis);
+
+/**
+ * @brief         BSP Accelerometer get ms2 axis
+ *
+ * @param[in]     ms2_axis  Accelerometer ms2 axis
+ *
+ * @attention     None
+ *
+ * @return
+ * - BS_OK
+ * - BS_ERROR
+ */
+base_status_t bsp_accel_get_ms2_axis(mis2dh_data_ms2_t *ms2_axis);
 
 /* -------------------------------------------------------------------------- */
 #ifdef __cplusplus

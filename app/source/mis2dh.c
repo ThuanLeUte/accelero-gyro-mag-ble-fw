@@ -69,6 +69,9 @@
 static base_status_t m_mis2dh_read_reg(mis2dh_t *me, uint8_t reg, uint8_t *p_data, uint32_t len);
 static base_status_t m_mis2dh_write_reg(mis2dh_t *me, uint8_t reg, uint8_t *p_data, uint32_t len);
 
+static double m_mis2dh_modifed_map(double x, double in_min, double in_max,
+                                   double out_min, double out_max);
+
 /* Function definitions ----------------------------------------------- */
 base_status_t mis2dh_init(mis2dh_t *me)
 {
@@ -87,6 +90,9 @@ base_status_t mis2dh_init(mis2dh_t *me)
 base_status_t mis2dh_set_resolution(mis2dh_t *me, mis2dh_resolution_t resolution)
 {
   uint8_t tmp;
+
+  me->config.resolution     = (resolution % 3) * 2;
+  me->config.resolution_max = (1 << me->config.resolution + 7);
 
   switch (resolution)
   {
@@ -131,6 +137,10 @@ base_status_t mis2dh_set_scale(mis2dh_t *me, mis2dh_scale_t scale)
 {
   uint8_t tmp;
 
+  me->config.scale     = scale % 4;
+  me->config.scale_max = 2;
+  me->config.scale_max = me->config.scale_max << me->config.scale;
+
   CHECK_STATUS(m_mis2dh_read_reg(me, MIS2DH_REG_CTRL_REG4, &tmp, 1));
   tmp &= 0xCF;
   tmp |= (scale << 4);
@@ -151,11 +161,10 @@ base_status_t mis2dh_set_refresh_rate(mis2dh_t *me, mis2dh_refresh_rate_t rf_rat
   return BS_OK;
 }
 
-base_status_t mis2dh_get_raw_data(mis2dh_t *me)
+base_status_t mis2dh_get_raw_axis(mis2dh_t *me, mis2dh_data_t *raw_axis)
 {
-  uint8_t status;
+  uint8_t status, sub;
   uint8_t data[6];
-  uint8_t sub;
 
   CHECK_STATUS(m_mis2dh_read_reg(me, MIS2DH_REG_STATUS_REG, &status, 1));
 
@@ -167,14 +176,45 @@ base_status_t mis2dh_get_raw_data(mis2dh_t *me)
     sub = MIS2DH_REG_OUT_X_L | 0x80;
     CHECK_STATUS(m_mis2dh_read_reg(me, sub, data, sizeof(data)));
 
-    me->raw_data.x = ((data[1] << 8) + data[0]);
-    me->raw_data.y = ((data[3] << 8) + data[2]);
-    me->raw_data.z = ((data[5] << 8) + data[4]);
+    raw_axis->x = ((data[1] << 8) | data[0]) >> (8 - me->config.resolution);
+    raw_axis->y = ((data[3] << 8) | data[2]) >> (8 - me->config.resolution);
+    raw_axis->z = ((data[5] << 8) | data[4]) >> (8 - me->config.resolution);
   }
   else
   {
     return BS_ERROR;
   }
+
+  return BS_OK;
+}
+
+base_status_t mis2dh_get_g_axis(mis2dh_t *me, mis2dh_data_t *g_axis)
+{
+  mis2dh_data_t raw_axis;
+
+  CHECK_STATUS(mis2dh_get_raw_axis(me, &raw_axis));
+
+  g_axis->x = m_mis2dh_modifed_map((double)raw_axis.x, -1 * me->config.resolution_max,
+               me->config.resolution_max - 1, -1 * me->config.scale_max, me->config.scale_max);
+
+  g_axis->x = m_mis2dh_modifed_map((double)raw_axis.y, -1 * me->config.resolution_max,
+               me->config.resolution_max - 1, -1 * me->config.scale_max, me->config.scale_max);
+
+  g_axis->x = m_mis2dh_modifed_map((double)raw_axis.z, -1 * me->config.resolution_max,
+               me->config.resolution_max - 1, -1 * me->config.scale_max, me->config.scale_max);
+
+  return BS_OK;
+}
+
+base_status_t mis2dh_get_ms2_axis(mis2dh_t *me, mis2dh_data_ms2_t *ms2_axis)
+{
+  mis2dh_data_t g_axis;
+
+  CHECK_STATUS(mis2dh_get_g_axis(me, &g_axis));
+
+  ms2_axis->x = g_axis.x * 9.806;
+  ms2_axis->y = g_axis.y * 9.806;
+  ms2_axis->z = g_axis.z * 9.806;
 
   return BS_OK;
 }
@@ -260,6 +300,13 @@ static base_status_t m_mis2dh_write_reg(mis2dh_t *me, uint8_t reg, uint8_t *p_da
   CHECK(0 == me->i2c_write(me->device_address, reg, p_data, len), BS_ERROR);
 
   return BS_OK;
+}
+
+static double m_mis2dh_modifed_map(double x, double in_min, double in_max,
+                                   double out_min, double out_max)
+
+{
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
 /* End of file -------------------------------------------------------- */

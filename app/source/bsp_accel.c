@@ -30,18 +30,30 @@ base_status_t bsp_accel_init(void)
 
   CHECK_STATUS(mis2dh_init(&m_mis2dh));
   CHECK_STATUS(mis2dh_enable_axis(&m_mis2dh, MIS2DH_AXIS_XYZ_ENABLE));
-  CHECK_STATUS(mis2dh_set_resolution(&m_mis2dh, MIS2DH_RES_VALUE_12_BIT));
+  CHECK_STATUS(mis2dh_set_resolution(&m_mis2dh, MIS2DH_RES_VALUE_8_BIT));
   CHECK_STATUS(mis2dh_set_refresh_rate(&m_mis2dh, MIS2DH_RF_RATE_400HZ));
   CHECK_STATUS(mis2dh_set_scale(&m_mis2dh, MIS2DH_SCALE_2G));
 
   return BS_OK;
 }
 
-base_status_t bsp_accel_get_raw_data(mis2dh_raw_data_t *raw_data)
+base_status_t bsp_accel_get_raw_axis(mis2dh_data_t *raw_axis)
 {
-  CHECK_STATUS(mis2dh_get_raw_data(&m_mis2dh));
+  CHECK_STATUS(mis2dh_get_raw_axis(&m_mis2dh, raw_axis));
 
-  memcpy(raw_data, &m_mis2dh.raw_data, sizeof(m_mis2dh.raw_data));
+  return BS_OK;
+}
+
+base_status_t bsp_accel_get_g_axis(mis2dh_data_t *g_axis)
+{
+  CHECK_STATUS(mis2dh_get_g_axis(&m_mis2dh, g_axis));
+
+  return BS_OK;
+}
+
+base_status_t bsp_accel_get_ms2_axis(mis2dh_data_ms2_t *ms2_axis)
+{
+  CHECK_STATUS(mis2dh_get_ms2_axis(&m_mis2dh, ms2_axis));
 
   return BS_OK;
 }

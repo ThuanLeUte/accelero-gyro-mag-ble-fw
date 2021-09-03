@@ -79,15 +79,26 @@ typedef enum
 mis2dh_scale_t;
 
 /**
- * @brief MIS2DH raw data
+ * @brief MIS2DH data
  */
 typedef struct
 {
-  float x;
-  float y;
-  float z;
+  uint16_t x;
+  uint16_t y;
+  uint16_t z;
 }
-mis2dh_raw_data_t;
+mis2dh_data_t;
+
+/**
+ * @brief MIS2DH data ms2
+ */
+typedef struct
+{
+  double x;
+  double y;
+  double z;
+}
+mis2dh_data_ms2_t;
 
 /**
  * @brief MIS2DH sensor struct
@@ -96,7 +107,16 @@ typedef struct
 {
   uint8_t  device_address;  // I2C device address
 
-  mis2dh_raw_data_t raw_data;
+  mis2dh_data_t raw_data;
+
+  struct
+  {
+    uint8_t resolution;
+    uint8_t resolution_max;
+    uint8_t scale;
+    uint8_t scale_max;
+  }
+  config;
 
   // Read n-bytes from device's internal address <reg_addr> via I2C bus
   int (*i2c_read) (uint8_t slave_addr, uint8_t reg_addr, uint8_t *data, uint32_t len);
@@ -165,9 +185,10 @@ base_status_t mis2dh_set_scale(mis2dh_t *me, mis2dh_scale_t scale);
 base_status_t mis2dh_set_refresh_rate(mis2dh_t *me, mis2dh_refresh_rate_t rf_rate);
 
 /**
- * @brief         MIS2DH get accel raw data
+ * @brief         MIS2DH get accel raw axis
  *
  * @param[in]     me        Pointer to handle of MIS2DH module
+ * @param[in]     raw_axis  Raw axis
  *
  * @attention     None
  *
@@ -175,7 +196,35 @@ base_status_t mis2dh_set_refresh_rate(mis2dh_t *me, mis2dh_refresh_rate_t rf_rat
  * - BS_OK
  * - BS_ERROR
  */
-base_status_t mis2dh_get_raw_data(mis2dh_t *me);
+base_status_t mis2dh_get_raw_axis(mis2dh_t *me, mis2dh_data_t *raw_axis);
+
+/**
+ * @brief         MIS2DH get accel g axis
+ *
+ * @param[in]     me        Pointer to handle of MIS2DH module
+ * @param[in]     g_axis    G axis
+ *
+ * @attention     None
+ *
+ * @return
+ * - BS_OK
+ * - BS_ERROR
+ */
+base_status_t mis2dh_get_g_axis(mis2dh_t *me, mis2dh_data_t *g_axis);
+
+/**
+ * @brief         MIS2DH get accel ms2 axis
+ *
+ * @param[in]     me        Pointer to handle of MIS2DH module
+ * @param[in]     ms2_axis  Ms2 axis
+ *
+ * @attention     None
+ *
+ * @return
+ * - BS_OK
+ * - BS_ERROR
+ */
+base_status_t mis2dh_get_ms2_axis(mis2dh_t *me, mis2dh_data_ms2_t *ms2_axis);
 
 /**
  * @brief         MIS2DH enable axis
