@@ -57,18 +57,18 @@ base_status_t hmc5883l_init(hmc5883l_t *me)
   return BS_OK;
 }
 
-base_status_t hmc5883l_read_raw(hmc5883l_t *me)
+base_status_t hmc5883l_read_raw(hmc5883l_t *me, hmc5883l_data_t *raw_axis)
 {
   uint8_t buffer[2];
 
   CHECK_STATUS(m_hmc5883l_read_reg(me, HMC5883L_REG_OUTPUT_X_MSB, buffer, 2));
-  me->data.x_axis = buffer[0] << 8 | buffer[1];
+  raw_axis->x = buffer[0] << 8 | buffer[1];
 
   CHECK_STATUS(m_hmc5883l_read_reg(me, HMC5883L_REG_OUTPUT_Y_MSB, buffer, 2));
-  me->data.y_axis = buffer[0] << 8 | buffer[1];
+  raw_axis->y = buffer[0] << 8 | buffer[1];
 
   CHECK_STATUS(m_hmc5883l_read_reg(me, HMC5883L_REG_OUTPUT_Z_MSB, buffer, 2));
-  me->data.z_axis = buffer[0] << 8 | buffer[1];
+  raw_axis->z = buffer[0] << 8 | buffer[1];
 
   return BS_OK;
 }

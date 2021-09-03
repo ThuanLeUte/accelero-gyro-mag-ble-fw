@@ -81,7 +81,7 @@ uint32_t ble_acs_init(ble_acs_t *p_acs, ble_acs_init_t const *p_acs_init)
   return m_ble_acs_add_char(p_acs, p_acs_init, BLE_ACS_AXIS_Z_CHAR);
 }
 
-ret_code_t ble_acs_acc_update(ble_acs_t *p_acs, uint8_t acc, uint16_t conn_handle, ble_acs_charaterictic_t charac)
+ret_code_t ble_acs_acc_update(ble_acs_t *p_acs, uint16_t acc, uint16_t conn_handle, ble_acs_charaterictic_t charac)
 {
   ret_code_t err_code;
 
@@ -165,8 +165,8 @@ static ret_code_t m_ble_acs_add_char(ble_acs_t *p_acs, const ble_acs_init_t *p_a
 
   memset(&add_char_params, 0, sizeof(add_char_params));
   add_char_params.uuid              = BLE_UUID_CHAR[charac];
-  add_char_params.max_len           = sizeof(uint8_t);
-  add_char_params.init_len          = sizeof(uint8_t);
+  add_char_params.max_len           = sizeof(uint16_t);
+  add_char_params.init_len          = sizeof(uint16_t);
   add_char_params.char_props.notify = p_acs->is_notification_supported;
   add_char_params.char_props.read   = 1;
   add_char_params.cccd_write_access = p_acs_init->bl_cccd_wr_sec;

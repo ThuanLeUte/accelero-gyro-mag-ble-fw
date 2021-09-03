@@ -40,13 +40,9 @@ base_status_t bsp_mag_init(void)
   return BS_OK;
 }
 
-base_status_t bsp_mag_read(float *x_axis, float *y_axis, float *z_axis)
+base_status_t bsp_mag_get_raw_axis(hmc5883l_data_t *raw_axis)
 {
-  CHECK_STATUS(hmc5883l_read_raw(&m_hmc5883l));
-
-  *x_axis = m_hmc5883l.data.x_axis;
-  *y_axis = m_hmc5883l.data.y_axis;
-  *z_axis = m_hmc5883l.data.z_axis;
+  CHECK_STATUS(hmc5883l_read_raw(&m_hmc5883l, raw_axis));
 
   return BS_OK;
 }

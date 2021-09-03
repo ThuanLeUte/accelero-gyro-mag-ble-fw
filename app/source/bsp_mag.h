@@ -52,7 +52,7 @@ base_status_t bsp_mag_init(void);
  * - BS_OK
  * - BS_ERROR
  */
-base_status_t bsp_mag_read(float *x_axis, float *y_axis, float *z_axis);
+base_status_t bsp_mag_get_raw_axis(hmc5883l_data_t *raw_axis);
 
 /* -------------------------------------------------------------------------- */
 #ifdef __cplusplus

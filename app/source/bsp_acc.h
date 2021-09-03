@@ -11,8 +11,8 @@
  */
 
 /* Define to prevent recursive inclusion ------------------------------ */
-#ifndef __BSP_ACCELERO_H
-#define __BSP_ACCELERO_H
+#ifndef __BSP_ACC_H
+#define __BSP_ACC_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -37,7 +37,7 @@ extern "C" {
  * - BS_OK
  * - BS_ERROR
  */
-base_status_t bsp_accel_init(void);
+base_status_t bsp_acc_init(void);
 
 /**
  * @brief         BSP Accelerometer get raw axis
@@ -50,7 +50,7 @@ base_status_t bsp_accel_init(void);
  * - BS_OK
  * - BS_ERROR
  */
-base_status_t bsp_accel_get_raw_axis(mis2dh_data_t *raw_axis);
+base_status_t bsp_acc_get_raw_axis(mis2dh_data_t *raw_axis);
 
 /**
  * @brief         BSP Accelerometer get g axis
@@ -63,7 +63,7 @@ base_status_t bsp_accel_get_raw_axis(mis2dh_data_t *raw_axis);
  * - BS_OK
  * - BS_ERROR
  */
-base_status_t bsp_accel_get_g_axis(mis2dh_data_t *g_axis);
+base_status_t bsp_acc_get_g_axis(mis2dh_data_t *g_axis);
 
 /**
  * @brief         BSP Accelerometer get ms2 axis
@@ -76,12 +76,12 @@ base_status_t bsp_accel_get_g_axis(mis2dh_data_t *g_axis);
  * - BS_OK
  * - BS_ERROR
  */
-base_status_t bsp_accel_get_ms2_axis(mis2dh_data_ms2_t *ms2_axis);
+base_status_t bsp_acc_get_ms2_axis(mis2dh_data_ms2_t *ms2_axis);
 
 /* -------------------------------------------------------------------------- */
 #ifdef __cplusplus
 } // extern "C"
 #endif
-#endif // __BSP_ACCELERO_H
+#endif // __BSP_ACC_H
 
 /* End of file -------------------------------------------------------- */

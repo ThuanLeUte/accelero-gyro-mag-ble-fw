@@ -1,5 +1,5 @@
 /**
- * @file       bsp_accelero.c
+ * @file       bsp_acc.c
  * @copyright  Copyright (C) 2020 ThuanLe. All rights reserved.
  * @license    This project is released under the ThuanLe License.
  * @version    1.0.0
@@ -11,7 +11,7 @@
  */
 
 /* Includes ----------------------------------------------------------- */
-#include "bsp_accel.h"
+#include "bsp_acc.h"
 
 /* Private defines ---------------------------------------------------- */
 /* Private enumerate/structure ---------------------------------------- */
@@ -22,7 +22,7 @@ static mis2dh_t m_mis2dh;
 
 /* Private function prototypes ---------------------------------------- */
 /* Function definitions ----------------------------------------------- */
-base_status_t bsp_accel_init(void)
+base_status_t bsp_acc_init(void)
 {
   m_mis2dh.device_address = MIS2DH_I2C_ADDR;
   m_mis2dh.i2c_read       = bsp_i2c_read;
@@ -37,21 +37,21 @@ base_status_t bsp_accel_init(void)
   return BS_OK;
 }
 
-base_status_t bsp_accel_get_raw_axis(mis2dh_data_t *raw_axis)
+base_status_t bsp_acc_get_raw_axis(mis2dh_data_t *raw_axis)
 {
   CHECK_STATUS(mis2dh_get_raw_axis(&m_mis2dh, raw_axis));
 
   return BS_OK;
 }
 
-base_status_t bsp_accel_get_g_axis(mis2dh_data_t *g_axis)
+base_status_t bsp_acc_get_g_axis(mis2dh_data_t *g_axis)
 {
   CHECK_STATUS(mis2dh_get_g_axis(&m_mis2dh, g_axis));
 
   return BS_OK;
 }
 
-base_status_t bsp_accel_get_ms2_axis(mis2dh_data_ms2_t *ms2_axis)
+base_status_t bsp_acc_get_ms2_axis(mis2dh_data_ms2_t *ms2_axis)
 {
   CHECK_STATUS(mis2dh_get_ms2_axis(&m_mis2dh, ms2_axis));
 

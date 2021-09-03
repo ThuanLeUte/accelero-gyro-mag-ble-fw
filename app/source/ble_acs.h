@@ -138,7 +138,7 @@ uint32_t ble_acs_init(ble_acs_t *p_acs, ble_acs_init_t const *p_acs_init);
  *
  * @return        None
  */
-ret_code_t ble_acs_acc_update(ble_acs_t *p_acs, uint8_t acc, uint16_t conn_handle, ble_acs_charaterictic_t charac);
+ret_code_t ble_acs_acc_update(ble_acs_t *p_acs, uint16_t acc, uint16_t conn_handle, ble_acs_charaterictic_t charac);
 
 /**
  * @brief                     Function for handling the Nordic Accelerometer Service's BLE events.

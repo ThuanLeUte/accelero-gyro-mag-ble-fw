@@ -404,11 +404,6 @@
               <FilePath>..\source\bsp.c</FilePath>
             </File>
             <File>
-              <FileName>bsp_accel.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\source\bsp_accel.c</FilePath>
-            </File>
-            <File>
               <FileName>mis2dh.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\source\mis2dh.c</FilePath>
@@ -422,6 +417,11 @@
               <FileName>hmc5883l.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\source\hmc5883l.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\source\bsp_acc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4061,11 +4061,6 @@
               <FilePath>..\source\bsp.c</FilePath>
             </File>
             <File>
-              <FileName>bsp_accel.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\source\bsp_accel.c</FilePath>
-            </File>
-            <File>
               <FileName>mis2dh.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\source\mis2dh.c</FilePath>
@@ -4079,6 +4074,11 @@
               <FileName>hmc5883l.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\source\hmc5883l.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\source\bsp_acc.c</FilePath>
             </File>
           </Files>
         </Group>

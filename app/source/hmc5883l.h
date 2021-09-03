@@ -80,22 +80,24 @@ typedef enum
 hmc5883l_mode_t;
 
 /**
+ * @brief MIS2DH data
+ */
+typedef struct
+{
+  uint16_t x;
+  uint16_t y;
+  uint16_t z;
+}
+hmc5883l_data_t;
+
+/**
  * @brief HMC5883L sensor struct
  */
 typedef struct 
 {
   uint8_t  device_address;  // I2C device address
 
-/**
- * @brief HMC5883L data
- */
-  struct
-  {
-    float x_axis;
-    float y_axis;
-    float z_axis;
-  }
-  data;
+  hmc5883l_data_t raw_data;
 
   // Read n-bytes from device's internal address <reg_addr> via I2C bus
   int (*i2c_read) (uint8_t slave_addr, uint8_t reg_addr, uint8_t *data, uint32_t len);
@@ -132,7 +134,8 @@ base_status_t hmc5883l_init(hmc5883l_t *me);
  * - BS_OK
  * - BS_ERROR
  */
-base_status_t hmc5883l_read_raw(hmc5883l_t *me);
+base_status_t hmc5883l_read_raw(hmc5883l_t *me, hmc5883l_data_t *raw_axis);
+
 
 /**
  * @brief         HMC5883L set measurement mode

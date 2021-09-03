@@ -9,7 +9,9 @@
         "lv_examples.h": "c",
         "lv_example_style.h": "c",
         "lv_example_anim.h": "c",
-        "bsp_mag.h": "c"
+        "bsp_mag.h": "c",
+        "hmc5883l.h": "c",
+        "nrf_uart.h": "c"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }

@@ -35,7 +35,7 @@
 #include "ble_dis.h"
 #include "ble_acs.h"
 #include "bsp.h"
-#include "bsp_accel.h"
+#include "bsp_acc.h"
 #include "bsp_mag.h"
 #include "nrf52832_peripherals.h"
 
@@ -146,7 +146,7 @@ int main(void)
   application_timers_start();
   advertising_start();
 
-  bsp_accel_init();
+  bsp_acc_init();
   bsp_mag_init();
 
   for (;;)
@@ -826,11 +826,11 @@ static void battery_level_update(void)
  */
 static void sensors_value_update(void)
 {
-  mis2dh_data_t mag_raw_data;
+  hmc5883l_data_t mag_raw_data;
   mis2dh_data_t acc_raw_data;
 
-  bsp_accel_get_raw_axis(&acc_raw_data);
-  //bsp_mag_read(&mag_raw_data.x, &mag_raw_data.y, &mag_raw_data.z);
+  bsp_acc_get_raw_axis(&acc_raw_data);
+  bsp_mag_get_raw_axis(&mag_raw_data);
 
   NRF_LOG_INFO("++++++++++++++++++++++++++++++++++++");
   NRF_LOG_INFO("Acc X Raw Axis: %d", acc_raw_data.x);
@@ -843,9 +843,9 @@ static void sensors_value_update(void)
   NRF_LOG_INFO("++++++++++++++++++++++++++++++++++++");
   NRF_LOG_INFO("");
 
-  ble_acs_acc_update(&m_acs, acc_raw_data.x, BLE_CONN_HANDLE_ALL, BLE_ACS_AXIS_X_CHAR);
-  ble_acs_acc_update(&m_acs, acc_raw_data.y, BLE_CONN_HANDLE_ALL, BLE_ACS_AXIS_Y_CHAR);
-  ble_acs_acc_update(&m_acs, acc_raw_data.z, BLE_CONN_HANDLE_ALL, BLE_ACS_AXIS_Z_CHAR);
+  ble_acs_acc_update(&m_acs, (uint16_t)acc_raw_data.x, BLE_CONN_HANDLE_ALL, BLE_ACS_AXIS_X_CHAR);
+  ble_acs_acc_update(&m_acs, (uint16_t)acc_raw_data.y, BLE_CONN_HANDLE_ALL, BLE_ACS_AXIS_Y_CHAR);
+  ble_acs_acc_update(&m_acs, (uint16_t)mag_raw_data.z, BLE_CONN_HANDLE_ALL, BLE_ACS_AXIS_Z_CHAR);
 }
 
 /**
