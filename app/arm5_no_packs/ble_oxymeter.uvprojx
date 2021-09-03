@@ -404,16 +404,6 @@
               <FilePath>..\source\bsp.c</FilePath>
             </File>
             <File>
-              <FileName>sys_temp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\source\sys_temp.c</FilePath>
-            </File>
-            <File>
-              <FileName>max30205.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\source\max30205.c</FilePath>
-            </File>
-            <File>
               <FileName>bsp_accel.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\source\bsp_accel.c</FilePath>
@@ -1141,9 +1131,9 @@
               <FilePath>..\..\components\ble\ble_services\ble_dis\ble_dis.c</FilePath>
             </File>
             <File>
-              <FileName>ble_body_temp_service.c</FileName>
+              <FileName>ble_acs.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\source\ble_body_temp_service.c</FilePath>
+              <FilePath>..\source\ble_acs.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4071,16 +4061,6 @@
               <FilePath>..\source\bsp.c</FilePath>
             </File>
             <File>
-              <FileName>sys_temp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\source\sys_temp.c</FilePath>
-            </File>
-            <File>
-              <FileName>max30205.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\source\max30205.c</FilePath>
-            </File>
-            <File>
               <FileName>bsp_accel.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\source\bsp_accel.c</FilePath>
@@ -4808,9 +4788,9 @@
               <FilePath>..\..\components\ble\ble_services\ble_dis\ble_dis.c</FilePath>
             </File>
             <File>
-              <FileName>ble_body_temp_service.c</FileName>
+              <FileName>ble_acs.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\source\ble_body_temp_service.c</FilePath>
+              <FilePath>..\source\ble_acs.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -31,10 +31,9 @@
 #include "nrf_delay.h"
 
 #include "sys_bm.h"
-#include "sys_temp.h"
 #include "ble_bas.h"
 #include "ble_dis.h"
-#include "ble_body_temp_service.h"
+#include "ble_acs.h"
 #include "bsp.h"
 #include "bsp_accel.h"
 #include "bsp_mag.h"
@@ -48,22 +47,16 @@
 #endif
 
 /* Private defines ---------------------------------------------------- */
-#define APP_BLE_CONN_CFG_TAG            1                                           /**< A tag identifying the SoftDevice BLE configuration. */
+#define APP_BLE_CONN_CFG_TAG            1                                          /**< A tag identifying the SoftDevice BLE configuration. */
 
-#define BODY_TEMP_MEAS_INTERVAL         APP_TIMER_TICKS(2000)                       /**< Body temperature measurement interval (ticks). */
-#define BATT_LEVEL_MEAS_INTERVAL        APP_TIMER_TICKS(20000)                      /**< Battery level measurement interval (ticks). */
+#define SENSORS_MEAS_INTERVAL           APP_TIMER_TICKS(2000)                      /**< Sensors measurement interval (ticks). */
+#define BATT_LEVEL_MEAS_INTERVAL        APP_TIMER_TICKS(20000)                     /**< Battery level measurement interval (ticks). */
 
-#ifdef TEMPERATURE_BOARD
-#define DEVICE_NAME                     "Human Body Temperature"                    /**< Name of device. Will be included in the advertising data. */
-#else
-#define DEVICE_NAME                     "Blood Oxygen"                              /**< Name of device. Will be included in the advertising data. */
-#endif
+#define DEVICE_NAME                     "acc-gyro-mag"                             /**< Name of device. Will be included in the advertising data. */
 
 #define MANUFACTURER_NAME               "miBEAT"                                   /**< Manufacturer. Will be passed to Device Information Service. */
 
-#define BOS_SERVICE_UUID_TYPE           BLE_UUID_TYPE_VENDOR_BEGIN                  /**< UUID type for the Nordic UART Service (vendor specific). */
-#define HRNS_SERVICE_UUID_TYPE          BLE_UUID_TYPE_VENDOR_BEGIN                  /**< UUID type for the Nordic UART Service (vendor specific). */
-#define BTS_SERVICE_UUID_TYPE           BLE_UUID_TYPE_VENDOR_BEGIN                  /**< UUID type for the Nordic UART Service (vendor specific). */
+#define ACS_SERVICE_UUID_TYPE           BLE_UUID_TYPE_VENDOR_BEGIN                  /**< UUID type for the Nordic UART Service (vendor specific). */
 
 #define APP_BLE_OBSERVER_PRIO           3                                           /**< Application's BLE observer priority. You shouldn't need to modify this value. */
 
@@ -82,12 +75,12 @@
 #define DEAD_BEEF                       0xDEADBEEF                                  /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
 
 /* Private macros ----------------------------------------------------- */                                                            /**< BLE HRNS service instance. */
-BLE_BTS_DEF(m_bts);                                                                /**< BLE BTS service instance. */
+BLE_ACS_DEF(m_acs);                                                                 /**< BLE ACS service instance. */
 BLE_BAS_DEF(m_bas);                                                                 /**< Structure used to identify the battery service. */
 NRF_BLE_GATT_DEF(m_gatt);                                                           /**< GATT module instance. */
 NRF_BLE_QWR_DEF(m_qwr);                                                             /**< Context for the Queued Write module.*/
 BLE_ADVERTISING_DEF(m_advertising);                                                 /**< Advertising module instance. */
-APP_TIMER_DEF(m_body_temp_timer_id);                                                /**< Body temperature measurement timer. */
+APP_TIMER_DEF(m_sensors_timer_id);                                                  /**< Sensor measurement timer. */
 APP_TIMER_DEF(m_battery_timer_id);                                                  /**< Battery timer. */
 
 /* Private variables -------------------------------------------------- */
@@ -118,14 +111,12 @@ static void idle_state_handle(void);
 static void advertising_start(void);
 
 static void battery_level_meas_timeout_handler(void * p_context);
-static void body_temp_meas_timeout_handler(void * p_context);
+static void sensors_meas_timeout_handler(void * p_context);
 
 static void battery_level_update(void);
-static void body_temp_update(void);
+static void sensors_value_update(void);
 
-static void bts_service_init(void);
-
-
+static void acs_service_init(void);
 static void bas_service_init(void);
 static void dis_service_init(void);
 
@@ -155,7 +146,7 @@ int main(void)
   application_timers_start();
   advertising_start();
 
-  // bsp_accel_init();
+  bsp_accel_init();
   bsp_mag_init();
 
   for (;;)
@@ -195,9 +186,9 @@ static void timers_init(void)
   APP_ERROR_CHECK(err_code);
 
   // Create timers.
-  err_code = app_timer_create(&m_body_temp_timer_id,
+  err_code = app_timer_create(&m_sensors_timer_id,
                               APP_TIMER_MODE_REPEATED,
-                              body_temp_meas_timeout_handler);
+                              sensors_meas_timeout_handler);
   APP_ERROR_CHECK(err_code);
 
   err_code = app_timer_create(&m_battery_timer_id,
@@ -254,7 +245,7 @@ static void nrf_qwr_error_handler(uint32_t nrf_error)
 }
 
 /**
- * @brief         Function for BTS service init
+ * @brief         Function for ACS service init
  *
  * @param[in]     None
  *
@@ -262,25 +253,23 @@ static void nrf_qwr_error_handler(uint32_t nrf_error)
  *
  * @return        None
  */
-static void bts_service_init(void)
+static void acs_service_init(void)
 {
   uint32_t           err_code;
-  ble_bts_init_t     bts_init;
+  ble_acs_init_t     acs_init;
 
-// Initialize BTS
-  memset(&bts_init, 0, sizeof(bts_init));
+// Initialize ACS
+  memset(&acs_init, 0, sizeof(acs_init));
 
-  bts_init.evt_handler          = NULL;
-  bts_init.support_notification = true;
-  bts_init.p_report_ref         = NULL;
-  bts_init.initial_body_temp    = 0;
+  acs_init.evt_handler          = NULL;
+  acs_init.support_notification = true;
+  acs_init.p_report_ref         = NULL;
 
-  // Here the sec Body temperature Service can be changed/increased.
-  bts_init.bl_rd_sec        = SEC_OPEN;
-  bts_init.bl_cccd_wr_sec   = SEC_OPEN;
-  bts_init.bl_report_rd_sec = SEC_OPEN;
+  acs_init.bl_rd_sec        = SEC_OPEN;
+  acs_init.bl_cccd_wr_sec   = SEC_OPEN;
+  acs_init.bl_report_rd_sec = SEC_OPEN;
 
-  err_code = ble_bts_init(&m_bts, &bts_init);
+  err_code = ble_acs_init(&m_acs, &acs_init);
   APP_ERROR_CHECK(err_code);
 }
 
@@ -360,8 +349,8 @@ static void services_init(void)
   err_code = nrf_ble_qwr_init(&m_qwr, &qwr_init);
   APP_ERROR_CHECK(err_code);
 
-  // Initialize Body temperature Service
-  bts_service_init();
+  // Initialize Custom Service
+  acs_service_init();
 
   // Initialize Battery Service.
   bas_service_init();
@@ -790,10 +779,10 @@ static void battery_level_meas_timeout_handler(void * p_context)
  *
  * @return        None
  */
-static void body_temp_meas_timeout_handler(void * p_context)
+static void sensors_meas_timeout_handler(void * p_context)
 {
   UNUSED_PARAMETER(p_context);
-  body_temp_update();
+  sensors_value_update();
 }
 
 /**
@@ -807,7 +796,6 @@ static void body_temp_meas_timeout_handler(void * p_context)
  */
 static void battery_level_update(void)
 {
-  ret_code_t err_code;
   uint8_t battery_level              = 0;
   static  uint8_t battery_cal_time   = 0;
   static  uint16_t sum_battery_level = 0;
@@ -823,18 +811,8 @@ static void battery_level_update(void)
     battery_cal_time  = 0;
     sum_battery_level = 0;
 
-    err_code = ble_bas_battery_level_update(&m_bas, battery_level, BLE_CONN_HANDLE_ALL);
-    if ((err_code != NRF_SUCCESS) &&
-        (err_code != NRF_ERROR_INVALID_STATE) &&
-        (err_code != NRF_ERROR_RESOURCES) &&
-        (err_code != NRF_ERROR_BUSY) &&
-        (err_code != BLE_ERROR_GATTS_SYS_ATTR_MISSING))
-    {
-      APP_ERROR_HANDLER(err_code);
-    }
+   ble_bas_battery_level_update(&m_bas, battery_level, BLE_CONN_HANDLE_ALL);
   }
-
-  // NRF_LOG_INFO( "Battery : %d percent", battery_level);
 }
 
 /**
@@ -846,29 +824,28 @@ static void battery_level_update(void)
  *
  * @return        None
  */
-static void body_temp_update(void)
+static void sensors_value_update(void)
 {
-  ret_code_t err_code;
-  float m_human_body_temp = 0;
-  mis2dh_raw_data_t raw_data;
+  mis2dh_data_t mag_raw_data;
+  mis2dh_data_t acc_raw_data;
 
-  // bsp_accel_get_raw_data(&raw_data);
-  bsp_mag_read(&raw_data.x, &raw_data.y, &raw_data.z);
+  bsp_accel_get_raw_axis(&acc_raw_data);
+  //bsp_mag_read(&mag_raw_data.x, &mag_raw_data.y, &mag_raw_data.z);
 
-  NRF_LOG_INFO( "X Axis: " NRF_LOG_FLOAT_MARKER, NRF_LOG_FLOAT(raw_data.x));
-  NRF_LOG_INFO( "Y Axis: " NRF_LOG_FLOAT_MARKER, NRF_LOG_FLOAT(raw_data.y));
-  NRF_LOG_INFO( "Z Axis: " NRF_LOG_FLOAT_MARKER, NRF_LOG_FLOAT(raw_data.z));
+  NRF_LOG_INFO("++++++++++++++++++++++++++++++++++++");
+  NRF_LOG_INFO("Acc X Raw Axis: %d", acc_raw_data.x);
+  NRF_LOG_INFO("Acc Y Raw Axis: %d", acc_raw_data.y);
+  NRF_LOG_INFO("Acc Z Raw Axis: %d", acc_raw_data.z);
+  NRF_LOG_INFO("-----------------------------------");
+  NRF_LOG_INFO("Mag X Raw Axis: %d", mag_raw_data.x);
+  NRF_LOG_INFO("Mag Y Raw Axis: %d", mag_raw_data.y);
+  NRF_LOG_INFO("Mag Z Raw Axis: %d", mag_raw_data.z);
+  NRF_LOG_INFO("++++++++++++++++++++++++++++++++++++");
+  NRF_LOG_INFO("");
 
-
-  err_code = ble_bts_body_temp_update(&m_bts, m_human_body_temp, BLE_CONN_HANDLE_ALL);
-  if ((err_code != NRF_SUCCESS) &&
-      (err_code != NRF_ERROR_INVALID_STATE) &&
-      (err_code != NRF_ERROR_RESOURCES) &&
-      (err_code != NRF_ERROR_BUSY) &&
-      (err_code != BLE_ERROR_GATTS_SYS_ATTR_MISSING))
-  {
-    APP_ERROR_HANDLER(err_code);
-  }
+  ble_acs_acc_update(&m_acs, acc_raw_data.x, BLE_CONN_HANDLE_ALL, BLE_ACS_AXIS_X_CHAR);
+  ble_acs_acc_update(&m_acs, acc_raw_data.y, BLE_CONN_HANDLE_ALL, BLE_ACS_AXIS_Y_CHAR);
+  ble_acs_acc_update(&m_acs, acc_raw_data.z, BLE_CONN_HANDLE_ALL, BLE_ACS_AXIS_Z_CHAR);
 }
 
 /**
@@ -885,12 +862,12 @@ static void application_timers_start(void)
   ret_code_t err_code;
 
   // Start application timers.
-  err_code = app_timer_start(m_body_temp_timer_id, BODY_TEMP_MEAS_INTERVAL, NULL);
-  APP_ERROR_CHECK(err_code);
+  err_code = app_timer_start(m_sensors_timer_id, SENSORS_MEAS_INTERVAL, NULL);
+    APP_ERROR_CHECK(err_code);
 
 
-  err_code = app_timer_start(m_battery_timer_id, BODY_TEMP_MEAS_INTERVAL, NULL);
-  APP_ERROR_CHECK(err_code);
+  err_code =  app_timer_start(m_battery_timer_id, BATT_LEVEL_MEAS_INTERVAL, NULL);
+    APP_ERROR_CHECK(err_code);
 }
 
-/* End of file -------------------------------------------------------- */
+/* End of fi le -------------------------------------------------------- */
