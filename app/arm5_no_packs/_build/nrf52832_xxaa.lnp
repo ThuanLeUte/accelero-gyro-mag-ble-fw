@@ -21,6 +21,7 @@
 ".\_build\ble_bas.o"
 ".\_build\ble_dis.o"
 ".\_build\ble_acs.o"
+".\_build\ble_mgs.o"
 ".\_build\nrf_drv_clock.o"
 ".\_build\nrf_drv_uart.o"
 ".\_build\nrfx_atomic.o"

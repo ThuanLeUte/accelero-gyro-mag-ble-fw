@@ -1135,6 +1135,11 @@
               <FileType>1</FileType>
               <FilePath>..\source\ble_acs.c</FilePath>
             </File>
+            <File>
+              <FileName>ble_mgs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\source\ble_mgs.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -4791,6 +4796,11 @@
               <FileName>ble_acs.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\source\ble_acs.c</FilePath>
+            </File>
+            <File>
+              <FileName>ble_mgs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\source\ble_mgs.c</FilePath>
             </File>
           </Files>
         </Group>

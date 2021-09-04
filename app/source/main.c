@@ -34,6 +34,7 @@
 #include "ble_bas.h"
 #include "ble_dis.h"
 #include "ble_acs.h"
+#include "ble_mgs.h"
 #include "bsp.h"
 #include "bsp_acc.h"
 #include "bsp_mag.h"
@@ -76,6 +77,7 @@
 
 /* Private macros ----------------------------------------------------- */                                                            /**< BLE HRNS service instance. */
 BLE_ACS_DEF(m_acs);                                                                 /**< BLE ACS service instance. */
+BLE_MGS_DEF(m_mgs);                                                                 /**< BLE MGS service instance. */
 BLE_BAS_DEF(m_bas);                                                                 /**< Structure used to identify the battery service. */
 NRF_BLE_GATT_DEF(m_gatt);                                                           /**< GATT module instance. */
 NRF_BLE_QWR_DEF(m_qwr);                                                             /**< Context for the Queued Write module.*/
@@ -117,6 +119,7 @@ static void battery_level_update(void);
 static void sensors_value_update(void);
 
 static void acs_service_init(void);
+static void mgs_service_init(void);
 static void bas_service_init(void);
 static void dis_service_init(void);
 
@@ -274,6 +277,35 @@ static void acs_service_init(void)
 }
 
 /**
+ * @brief         Function for MGS service init
+ *
+ * @param[in]     None
+ *
+ * @attention     None
+ *
+ * @return        None
+ */
+static void mgs_service_init(void)
+{
+  uint32_t           err_code;
+  ble_mgs_init_t     mgs_init;
+
+// Initialize MGS
+  memset(&mgs_init, 0, sizeof(mgs_init));
+
+  mgs_init.evt_handler          = NULL;
+  mgs_init.support_notification = true;
+  mgs_init.p_report_ref         = NULL;
+
+  mgs_init.bl_rd_sec        = SEC_OPEN;
+  mgs_init.bl_cccd_wr_sec   = SEC_OPEN;
+  mgs_init.bl_report_rd_sec = SEC_OPEN;
+
+  err_code = ble_mgs_init(&m_mgs, &mgs_init);
+  APP_ERROR_CHECK(err_code);
+}
+
+/**
  * @brief         Function for BAS service init
  *
  * @param[in]     None
@@ -351,6 +383,7 @@ static void services_init(void)
 
   // Initialize Custom Service
   acs_service_init();
+  mgs_service_init();
 
   // Initialize Battery Service.
   bas_service_init();
@@ -845,7 +878,11 @@ static void sensors_value_update(void)
 
   ble_acs_acc_update(&m_acs, (uint16_t)acc_raw_data.x, BLE_CONN_HANDLE_ALL, BLE_ACS_AXIS_X_CHAR);
   ble_acs_acc_update(&m_acs, (uint16_t)acc_raw_data.y, BLE_CONN_HANDLE_ALL, BLE_ACS_AXIS_Y_CHAR);
-  ble_acs_acc_update(&m_acs, (uint16_t)mag_raw_data.z, BLE_CONN_HANDLE_ALL, BLE_ACS_AXIS_Z_CHAR);
+  ble_acs_acc_update(&m_acs, (uint16_t)acc_raw_data.z, BLE_CONN_HANDLE_ALL, BLE_ACS_AXIS_Z_CHAR);
+
+  ble_mgs_mag_update(&m_mgs, (uint16_t)mag_raw_data.x, BLE_CONN_HANDLE_ALL, BLE_MGS_AXIS_X_CHAR);
+  ble_mgs_mag_update(&m_mgs, (uint16_t)mag_raw_data.y, BLE_CONN_HANDLE_ALL, BLE_MGS_AXIS_Y_CHAR);
+  ble_mgs_mag_update(&m_mgs, (uint16_t)mag_raw_data.z, BLE_CONN_HANDLE_ALL, BLE_MGS_AXIS_Z_CHAR);
 }
 
 /**
