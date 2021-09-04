@@ -1140,6 +1140,11 @@
               <FileType>1</FileType>
               <FilePath>..\source\ble_mgs.c</FilePath>
             </File>
+            <File>
+              <FileName>ble_gys.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\source\ble_gys.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -4801,6 +4806,11 @@
               <FileName>ble_mgs.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\source\ble_mgs.c</FilePath>
+            </File>
+            <File>
+              <FileName>ble_gys.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\source\ble_gys.c</FilePath>
             </File>
           </Files>
         </Group>

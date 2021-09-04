@@ -176,7 +176,7 @@ static ret_code_t m_ble_acs_add_char(ble_acs_t *p_acs, const ble_acs_init_t *p_a
 }
 
 /**
- * @brief         Function for sending notifications with the Accelerometer Level characteristic.
+ * @brief         Function for sending notifications with the Accelerometer characteristic.
  *
  * @param[in]     p_hvx_params Pointer to structure with notification data.
  * @param[in]     conn_handle  Connection handle.
@@ -191,14 +191,14 @@ static ret_code_t m_ble_acs_send_notification(ble_gatts_hvx_params_t *const p_hv
   ret_code_t err_code = sd_ble_gatts_hvx(conn_handle, p_hvx_params);
 
   if (err_code == NRF_SUCCESS)
-	{
+  {
     NRF_LOG_INFO("Accelerometer notification has been sent using conn_handle: 0x%04X", conn_handle);
-	}
+  }
   else
-	{
+  {
     NRF_LOG_DEBUG("Error: 0x%08X while sending notification with conn_handle: 0x%04X", err_code, conn_handle);
-	}
-	
+  }
+
   return err_code;
 }
 
